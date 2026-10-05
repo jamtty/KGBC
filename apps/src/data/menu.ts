@@ -58,6 +58,11 @@ export const MENU: MenuGroup[] = [
   },
 ]
 
+/** GNB·푸터·브래드크럼에서 그룹을 가리킬 때 이동할 경로 = LNB 첫 번째 페이지 */
+export function groupEntryPath(group: MenuGroup): string {
+  return group.children[0]?.path ?? group.path
+}
+
 export type PageMeta = {
   group: string
   groupPath: string

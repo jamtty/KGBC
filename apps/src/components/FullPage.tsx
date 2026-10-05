@@ -32,8 +32,6 @@ export default function FullPage({ children }: FullPageProps) {
   const sections = Children.toArray(children)
   const total = sections.length
   const [index, setIndex] = useState(0)
-  /** Whether the scroller has reached the bottom (the short footer trailer included). */
-  const [atEnd, setAtEnd] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
   const sectionRefs = useRef<(HTMLElement | null)[]>([])
   const indexRef = useRef(0)
@@ -150,22 +148,6 @@ export default function FullPage({ children }: FullPageProps) {
     return () => observer.disconnect()
   }, [total])
 
-  // The footer is a short trailer under the last section, so the snap only reaches it
-  // through the scroll clamp. Hide the next-section hint once the bottom is reached.
-  useEffect(() => {
-    const root = scrollRef.current
-    if (!root) return
-
-    const update = () => setAtEnd(root.scrollTop + root.clientHeight >= root.scrollHeight - 1)
-    update()
-    root.addEventListener('scroll', update, { passive: true })
-    window.addEventListener('resize', update)
-    return () => {
-      root.removeEventListener('scroll', update)
-      window.removeEventListener('resize', update)
-    }
-  }, [])
-
   // GSAP scroll effects: staggered content reveal + a slow, symmetric drift.
   useIsomorphicLayoutEffect(() => {
     const root = scrollRef.current
@@ -274,12 +256,6 @@ export default function FullPage({ children }: FullPageProps) {
           <div className="fp__inner">{section}</div>
         </section>
       ))}
-
-      {!atEnd && (
-        <button type="button" className="fp__scroll" onClick={() => goTo(index + 1)} aria-label="다음 섹션">
-          <span className="fp__scroll-arrow" aria-hidden="true" />
-        </button>
-      )}
     </div>
   )
 }

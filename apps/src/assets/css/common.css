@@ -262,7 +262,7 @@ textarea {
 
 input[readonly] {
   background-color: #eee;
-  padding: 0 15px;
+  padding: 0 1.5rem;
   color: #555;
 }
 

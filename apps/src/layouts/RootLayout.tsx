@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
+import TopButton from '../components/TopButton'
 
 export default function RootLayout() {
   const { pathname } = useLocation()
@@ -19,6 +20,7 @@ export default function RootLayout() {
       </main>
       {/* The home page renders the footer inside FullPage as its last screen. */}
       {!isHome && <Footer />}
+      <TopButton />
     </div>
   )
 }
