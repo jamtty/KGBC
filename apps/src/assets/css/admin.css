@@ -1,0 +1,4224 @@
+/* ===== 관리자 로그인 ===== */
+.admin_login_wrap {
+  min-height: 100vh;
+  background: #f4f6fb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.admin_login_box {
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 40rem;
+  padding: 5rem 4rem 4rem;
+}
+.admin_login_title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #111;
+  text-align: center;
+  margin-bottom: 3.2rem;
+  letter-spacing: -0.03em;
+}
+.admin_session_expired_msg {
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  border-radius: 0.6rem;
+  color: #c2410c;
+  font-size: 1.35rem;
+  line-height: 1.6;
+  padding: 1.2rem 1.4rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.admin_login_field {
+  margin-bottom: 1.6rem;
+}
+.admin_login_field label {
+  display: block;
+  font-size: 1.4rem;
+  color: #333;
+  margin-bottom: 0.6rem;
+  font-weight: 500;
+}
+.admin_login_field .input_wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.admin_login_field input[type='text'],
+.admin_login_field input[type='password'] {
+  width: 100%;
+  height: 4.8rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.6rem;
+  padding: 0 4.4rem 0 1.4rem;
+  font-size: 1.5rem;
+  color: #111;
+  background: #fff;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+  box-sizing: border-box;
+}
+.admin_login_field input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+.admin_login_field input::placeholder {
+  color: #b0b8c1;
+  font-size: 1.4rem;
+}
+.btn_pw_toggle {
+  position: absolute;
+  right: 1.2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  color: #9ca3af;
+  font-size: 1.8rem;
+  line-height: 1;
+}
+.btn_pw_toggle:hover {
+  color: #4b5563;
+}
+.admin_login_options {
+  display: flex;
+  gap: 1.6rem;
+  margin-bottom: 2rem;
+}
+.admin_login_options label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.3rem;
+  color: #555;
+  cursor: pointer;
+  user-select: none;
+}
+.admin_login_options input[type='checkbox'] {
+  width: 1.5rem;
+  height: 1.5rem;
+  accent-color: #2563eb;
+  cursor: pointer;
+}
+.admin_login_error {
+  font-size: 1.3rem;
+  color: #ef4444;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 0.6rem;
+  padding: 0.9rem 1.2rem;
+  margin-bottom: 1.4rem;
+}
+.btn_admin_login {
+  width: 100%;
+  height: 5rem;
+  background: #2563eb;
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  letter-spacing: -0.01em;
+}
+.btn_admin_login:hover {
+  background: #1d4ed8;
+}
+.btn_admin_login:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.admin_login_links {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-top: 1.8rem;
+}
+.admin_login_links a,
+.admin_login_links span {
+  font-size: 1.3rem;
+  color: #6b7280;
+  text-decoration: none;
+  padding: 0 1.2rem;
+  cursor: pointer;
+}
+.admin_login_links a:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+.admin_login_links .divider {
+  color: #d1d5db;
+  padding: 0;
+  cursor: default;
+}
+
+/* ===== 관리자 메인 ===== */
+.adm_wrap {
+  display: flex;
+  min-height: 100vh;
+  background: #f0f2f5;
+  font-size: 1.4rem;
+}
+
+/* 사이드바 */
+.adm_sidebar {
+  width: 22rem;
+  min-width: 22rem;
+  background: #fff;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 100;
+}
+.adm_logo {
+  height: 6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #e5e7eb;
+  background: #1e3a5f;
+}
+.adm_logo a {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: -0.03em;
+}
+.adm_nav {
+  flex: 1;
+  padding: 1.2rem 0;
+  overflow-y: auto;
+}
+.adm_nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.adm_nav ul li a {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1.1rem 2rem;
+  font-size: 1.4rem;
+  color: #555;
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+.adm_nav ul li a .material-icons {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+.adm_nav ul li a:hover {
+  background: #f0f4ff;
+  color: #2563eb;
+}
+.adm_nav ul li a.active {
+  background: #eff6ff;
+  color: #2563eb;
+  font-weight: 600;
+  border-left-color: #2563eb;
+}
+.adm_nav ul li a.disabled {
+  color: #bbb;
+  cursor: not-allowed;
+}
+.adm_nav ul li a.disabled:hover {
+  background: transparent;
+  color: #bbb;
+}
+
+/* ── 사이드바 서브(트리) 메뉴 ── */
+/* 하위가 있는 상위 그룹 노드 - to 가 있으면 클릭 시 이동(링크), 없으면 버튼(토글) */
+.adm_nav_group {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 1.1rem 2rem;
+  font-size: 1.4rem;
+  font-family: inherit;
+  color: #555;
+  background: none;
+  border: none;
+  border-left: 3px solid transparent;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+.adm_nav_group:hover {
+  background: #f0f4ff;
+  color: #2563eb;
+}
+.adm_nav_group.active {
+  background: #eff6ff;
+  color: #2563eb;
+  font-weight: 600;
+  border-left-color: #2563eb;
+}
+
+/* 상위 노드가 클릭 가능한 링크일 때 - a 기본 스타일과 충돌 보정 */
+.adm_nav ul li a.adm_nav_group {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.adm_nav_group .material-icons:first-child {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.adm_nav_arrow {
+  margin-left: auto;
+  font-size: 1.8rem !important;
+  color: #9ca3af;
+  transition: transform 0.15s;
+  transform: rotate(180deg);
+}
+/* 닫힌 그룹: 아래(expand_more) 화살표를 오른쪽으로 회전 */
+.adm_nav_arrow.closed {
+  transform: rotate(0deg);
+}
+
+.adm_nav_sub {
+  margin-left: 2.2rem;
+  padding: 0 0 0.4rem 1.6rem;
+}
+
+.adm_nav_sub li.adm_nav_child > a {
+  padding-left: 5rem;
+  font-size: 1.3rem;
+}
+
+/* 하위(3뎁스) 메뉴는 좌측 활성 라인 표시하지 않음 */
+.adm_nav_sub li.adm_nav_child > a.active {
+  border-left-color: transparent;
+}
+
+.adm_nav_sub li.adm_nav_child > a .material-icons {
+  font-size: 1.8rem;
+}
+.adm_soon_badge {
+  margin-left: auto;
+  padding: 0.2rem 0.6rem;
+  font-size: 1rem;
+  color: #94a3b8;
+  background: #f1f5f9;
+  border-radius: 0.4rem;
+  white-space: nowrap;
+}
+.adm_nav_section {
+  list-style: none;
+}
+.adm_nav_section > ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.adm_nav_section_label {
+  display: block;
+  padding: 1.2rem 2rem 0.4rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #aaa;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: 0.4rem;
+}
+
+/* 콘텐츠 영역 */
+.adm_content {
+  flex: 1;
+  margin-left: 22rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* 상단 헤더 */
+.adm_header {
+  height: 6rem;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.4rem;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
+.adm_page_title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #111;
+}
+.adm_user {
+  position: relative;
+}
+.adm_user_btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.6rem;
+  padding: 0.7rem 1.2rem;
+  font-size: 1.4rem;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.adm_user_btn:hover {
+  background: #f3f4f6;
+}
+.adm_dropdown {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  right: 0;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.8rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  min-width: 13rem;
+  list-style: none;
+  padding: 0.4rem 0;
+  margin: 0;
+  z-index: 200;
+}
+.adm_dropdown li a,
+.adm_dropdown li button {
+  display: block;
+  width: 100%;
+  padding: 1rem 1.6rem;
+  font-size: 1.4rem;
+  color: #333;
+  text-decoration: none;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s;
+  box-sizing: border-box;
+}
+.adm_dropdown li a:hover,
+.adm_dropdown li button:hover {
+  background: #f3f4f6;
+  color: #2563eb;
+}
+
+/* 헤더 우측 액션 (알림 + 계정) */
+.adm_header_actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+/* 새 공지 알림(벨) */
+.adm_alarm {
+  position: relative;
+}
+.adm_alarm_btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  color: #374151;
+  background: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.adm_alarm_btn:hover {
+  background: #f3f4f6;
+}
+.adm_alarm_badge {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.2rem;
+  min-width: 1.8rem;
+  height: 1.8rem;
+  padding: 0 0.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  background: #ef4444;
+  border-radius: 1rem;
+  border: 2px solid #fff;
+  box-sizing: border-box;
+}
+.adm_alarm_badge_num {
+  line-height: 1;
+  transform: translateY(0.1rem);
+}
+
+/* 알림 레이어 */
+.adm_alarm_pop {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  right: 0;
+  width: 34rem;
+  max-width: 86vw;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.8rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  z-index: 210;
+  overflow: hidden;
+}
+.adm_alarm_pop_title {
+  margin: 0;
+  padding: 1.1rem 1.4rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #111;
+  border-bottom: 1px solid #eef2f7;
+}
+/* 두 번째 섹션 제목 앞에는 구분선 */
+.adm_alarm_todo + .adm_alarm_pop_title {
+  border-top: 1px solid #eef2f7;
+}
+
+/* 처리할 대관 업무 (대관신청 / 전자계약 / 결제) */
+.adm_alarm_todo {
+  list-style: none;
+  margin: 0;
+  padding: 0.4rem 0;
+}
+/* 안내 문구 — 카운트는 '건별 상세 열람' 시에만 해제된다 */
+.adm_alarm_hint {
+  margin: 0;
+  padding: 0.8rem 1.4rem 0.2rem;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: #94a3b8;
+}
+.adm_alarm_todo li a {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.4rem;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.adm_alarm_todo li a:hover {
+  background: #f3f4f6;
+}
+.adm_alarm_todo_icon {
+  flex: 0 0 auto;
+  font-size: 2rem;
+  color: #94a3b8;
+}
+.adm_alarm_todo li a.has-count .adm_alarm_todo_icon {
+  color: #2563eb;
+}
+.adm_alarm_todo_text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+.adm_alarm_todo_text strong {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+.adm_alarm_todo_text em {
+  font-style: normal;
+  font-size: 1.2rem;
+  color: #9ca3af;
+}
+.adm_alarm_todo_count {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.4rem;
+  height: 2.4rem;
+  padding: 0 0.7rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #6b7280;
+  background: #f1f5f9;
+  border-radius: 99rem;
+}
+.adm_alarm_todo li a.has-count .adm_alarm_todo_count {
+  color: #fff;
+  background: #2563eb;
+}
+.adm_alarm_list {
+  list-style: none;
+  margin: 0;
+  padding: 0.4rem 0;
+  max-height: 26rem;
+  overflow-y: auto;
+}
+.adm_alarm_list li a {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 1.4rem;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.adm_alarm_list li a:hover {
+  background: #f3f4f6;
+}
+.adm_alarm_item_title {
+  flex: 1;
+  min-width: 0;
+  font-size: 1.4rem;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.adm_alarm_empty {
+  margin: 0;
+  padding: 1.6rem;
+  font-size: 1.3rem;
+  color: #9ca3af;
+  text-align: center;
+}
+.adm_alarm_foot {
+  padding: 0.8rem 1.4rem;
+  border-top: 1px solid #eef2f7;
+  text-align: center;
+}
+.adm_alarm_foot a {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #2563eb;
+  text-decoration: none;
+}
+.adm_alarm_foot a:hover {
+  text-decoration: underline;
+}
+
+/* 새 공지 N 배지 (목록 제목/알림) */
+.adm_new_badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-left: 0.4rem;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #fff;
+  background: #ef4444;
+  border-radius: 0.4rem;
+  vertical-align: 0.1rem;
+}
+
+/* 본문 */
+.adm_main {
+  padding: 2.4rem;
+  flex: 1;
+}
+.adm_section {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.8rem;
+  margin-bottom: 2rem;
+  overflow: hidden;
+  padding:2.4rem;
+}
+.adm_section_title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111;
+  padding: 1.6rem 2rem;
+  border-bottom: 1px solid #e5e7eb;
+  margin: 0 0 1rem;
+}
+
+/* 콘텐츠 현황 */
+.adm_stats {
+  display: flex;
+  gap: 0;
+}
+.adm_stat_card {
+  flex: 1;
+  padding: 2.4rem 2rem;
+  text-align: center;
+  border-right: 1px solid #e5e7eb;
+}
+.adm_stat_card:last-child {
+  border-right: none;
+}
+.adm_stat_label {
+  font-size: 1.3rem;
+  color: #888;
+  margin-bottom: 0.8rem;
+}
+.adm_stat_count {
+  font-size: 3.2rem;
+  font-weight: 700;
+  color: #2563eb;
+  line-height: 1;
+}
+.adm_stat_unit {
+  font-size: 1.2rem;
+  color: #aaa;
+  margin-top: 0.4rem;
+}
+
+/* 바로가기 */
+.adm_shortcuts {
+  display: flex;
+  gap: 1.6rem;
+  padding: 2rem;
+}
+.adm_shortcut_card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2.4rem 1.6rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.8rem;
+  text-decoration: none;
+  color: #333;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+.adm_shortcut_card:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+.adm_shortcut_icon {
+  font-size: 2.8rem;
+}
+.adm_shortcut_label {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #333;
+}
+
+/* ===== 관리자 마이페이지 ===== */
+.adm_mypage_info {
+  padding: 0.8rem 2rem 2rem;
+}
+.adm_mypage_row {
+  display: flex;
+  align-items: center;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+.adm_mypage_row:last-child {
+  border-bottom: none;
+}
+.adm_mypage_label {
+  width: 10rem;
+  font-size: 1.3rem;
+  color: #888;
+  flex-shrink: 0;
+}
+.adm_mypage_value {
+  font-size: 1.4rem;
+  color: #111;
+  font-weight: 500;
+}
+
+.adm_mypage_form {
+  padding: 0.8rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+.adm_form_field {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.adm_form_field label {
+  font-size: 1.3rem;
+  color: #555;
+  font-weight: 500;
+}
+.adm_form_field label small {
+  font-size: 1.1rem;
+  color: #aaa;
+  font-weight: 400;
+}
+.adm_form_field input {
+  height: 4.2rem;
+  padding: 0 1.2rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.6rem;
+  font-size: 1.4rem;
+  color: #111;
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+  width: 100%;
+}
+.adm_form_field input:focus {
+  border-color: #2563eb;
+}
+.adm_phone_row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.adm_phone_row input {
+  flex: 1;
+}
+.adm_phone_row .btn-sm {
+  flex-shrink: 0;
+  height: 4.2rem;
+  white-space: nowrap;
+}
+.adm_phone_row .verify-done {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.adm_phone_row .verify-done .material-icons {
+  font-size: 1.7rem;
+}
+.adm_field_error {
+  font-size: 1.2rem;
+  color: #dc2626;
+}
+.adm_btn_primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 4.4rem;
+  padding: 0 2.4rem;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 0.6rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  align-self: flex-start;
+}
+.adm_btn_primary:hover {
+  background: #1d4ed8;
+}
+.adm_btn_primary:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+}
+
+/* ── 관리자 게시판 공통 ─────────────────────────────── */
+.adm_toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.6rem 2rem;
+  border-bottom: 1px solid #e5e7eb;
+  gap: 1rem;
+}
+.adm_search_form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  flex: 1;
+}
+.adm_search_row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+.adm_search_label {
+  font-size: 1.3rem;
+  color: #374151;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.adm_search_date {
+  height: 3.8rem;
+  padding: 0 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.6rem;
+  font-size: 1.4rem;
+  outline: none;
+  box-sizing: border-box;
+  cursor: pointer;
+  width: 12rem;
+  background: #fff;
+  caret-color: transparent;
+}
+.adm_search_date:focus {
+  border-color: #2563eb;
+}
+/* ── Custom DatePicker ──────────────────────────── */
+.adm_datepicker {
+  position: relative;
+  display: inline-block;
+}
+.adm_calendar {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 200;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.13);
+  padding: 1.4rem 1.2rem;
+  width: 25rem;
+  user-select: none;
+}
+.adm_cal_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.adm_cal_title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+}
+.adm_cal_nav {
+  background: none;
+  border: none;
+  font-size: 2.6rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #9ca3af;
+  padding: 0 0.2rem;
+  display: flex;
+  align-items: center;
+}
+.adm_cal_nav:hover { color: #111827; }
+.adm_cal_grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+.adm_cal_label {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #9ca3af;
+  padding: 0.4rem 0 0.6rem;
+}
+.adm_cal_label.is_sun { color: #ef4444; }
+.adm_cal_cell {
+  width: 3.1rem;
+  height: 3.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.15rem auto;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #374151;
+  transition: background 0.1s;
+}
+.adm_cal_cell:hover { background: #f3f4f6; }
+.adm_cal_cell.is_sun { color: #ef4444; }
+.adm_cal_cell.is_sat { color: #2563eb; }
+.adm_cal_cell.is_today {
+  background: #e5e7eb;
+  font-weight: 700;
+}
+.adm_cal_cell.is_selected {
+  background: #2563eb !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+.adm_cal_cell.is_disabled {
+  color: #d1d5db !important;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.adm_search_select {
+  height: 3.8rem;
+  padding: 0 2.8rem 0 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.6rem;
+  font-size: 1.4rem;
+  outline: none;
+  box-sizing: border-box;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23374151' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 1rem center;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+.adm_search_select:focus {
+  border-color: #2563eb;
+}
+.adm_search_keyword {
+  height: 3.8rem;
+  padding: 0 1.2rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.6rem;
+  font-size: 1.4rem;
+  width: 22rem;
+  outline: none;
+  box-sizing: border-box;
+}
+.adm_search_keyword:focus {
+  border-color: #2563eb;
+}
+.adm_search_btn {
+  height: 3.8rem;
+  width: 3.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.adm_search_btn:hover {
+  background: #1d4ed8;
+}
+.adm_search_btn .material-icons {
+  font-size: 2rem;
+}
+.adm_search_form input {
+  height: 3.8rem;
+  padding: 0 1.2rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.6rem;
+  font-size: 1.4rem;
+  width: 24rem;
+  outline: none;
+  box-sizing: border-box;
+}
+.adm_search_form input:focus {
+  border-color: #2563eb;
+}
+.adm_btn_secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 3.8rem;
+  padding: 0 1.6rem;
+  background: #fff;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 0.6rem;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.adm_btn_secondary:hover {
+  background-color: #f3f4f6;
+}
+select.adm_btn_secondary {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23374151' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 3rem;
+}
+.adm_table_wrap {
+  overflow-x: auto;
+}
+.adm_table_notice {
+  padding:10px 20px;
+  font-size: 1.3rem;
+  color: #6b7280;
+}
+.adm_table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.4rem;
+}
+.adm_table th {
+  background: #f9fafb;
+  padding: 1.2rem 1.6rem;
+  text-align: center;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+.adm_table td {
+  padding: 1.2rem 1.6rem;
+  border-bottom: 1px solid #f3f4f6;
+  color: #111;
+  vertical-align: middle;
+}
+.adm_table tbody tr:hover {
+  background: #f9fafb;
+}
+.adm_table_empty {
+  text-align: center !important;
+  color: #9ca3af;
+  padding: 4rem !important;
+}
+.adm_td_center {
+  text-align: center !important;
+}
+.adm_td_left {
+  text-align: left !important;
+}
+/* 회원정보 목록 - 셀 가운데 정렬 */
+.adm_members_table th,
+.adm_members_table td {
+  text-align: center;
+}
+.adm_status_badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 1rem;
+  border-radius: 2rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.adm_status_pending {
+  background: #fef3c7;
+  color: #b45309;
+}
+.adm_status_approved {
+  background: #dcfce7;
+  color: #15803d;
+}
+.adm_status_rejected {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+.adm_status_select {
+  height: 3.2rem;
+  padding: 0 2.8rem 0 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.4rem;
+  font-size: 1.3rem;
+  color: #111;
+  background: #fff
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23374151' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    no-repeat right 1rem center;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  outline: none;
+}
+.adm_status_select:focus {
+  border-color: #2563eb;
+}
+
+/* ── 관리자 상세 모달 ─────────────────────────────── */
+.adm_modal_overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.adm_modal {
+  background: #fff;
+  border-radius: 0.8rem;
+  width: 100%;
+  max-width: 54rem;
+  max-height: 82vh;
+  overflow-y: auto;
+}
+.adm_modal_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.6rem 2rem;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  background: #fff;
+}
+.adm_modal_title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #111;
+}
+.adm_modal_close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  border: none;
+  background: none;
+  color: #6b7280;
+  cursor: pointer;
+  border-radius: 0.4rem;
+}
+.adm_modal_close:hover {
+  background: #f3f4f6;
+  color: #111;
+}
+.adm_modal_body {
+  padding: 0.8rem 2rem 2rem;
+}
+.adm_modal_row {
+  display: flex;
+  align-items: flex-start;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid #f3f4f6;
+  gap: 1rem;
+}
+.adm_modal_row:last-child {
+  border-bottom: none;
+}
+.adm_modal_label {
+  width: 9rem;
+  color: #888;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  line-height: 1.6;
+}
+.adm_modal_value {
+  font-size: 1.4rem;
+  color: #111;
+  line-height: 1.6;
+  word-break: break-all;
+}
+.adm_table input[type='checkbox'] {
+  width: 1.6rem;
+  height: 1.6rem;
+  cursor: pointer;
+  accent-color: #2563eb;
+  vertical-align: middle;
+}
+.adm_table_link {
+  color: #111;
+  text-decoration: none;
+}
+.adm_table_link:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+.adm_action_btns {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  justify-content: center;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+.adm_action_btns .adm_btn_secondary {
+  height: 3rem;
+  padding: 0 1rem;
+  font-size: 1.2rem;
+  border-radius: 0.4rem;
+}
+/* 공개 여부 토글 스위치 (목록에서 바로 전환) */
+.adm_switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.adm_switch input[type='checkbox'] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.adm_switch_track {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  width: 3.6rem;
+  height: 2rem;
+  background: #d1d5db;
+  border-radius: 99rem;
+  transition: background-color 0.2s ease;
+}
+.adm_switch_thumb {
+  position: absolute;
+  top: 0.25rem;
+  left: 0.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0.1rem 0.3rem rgba(15, 23, 42, 0.25);
+  transition: transform 0.2s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.adm_switch.is-on .adm_switch_track {
+  background: #2563eb;
+}
+.adm_switch.is-on .adm_switch_thumb {
+  transform: translateX(1.6rem);
+}
+.adm_switch_text {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+.adm_switch.is-on .adm_switch_text {
+  color: #1d4ed8;
+}
+.adm_switch input[type='checkbox']:focus-visible + .adm_switch_track {
+  outline: 0.2rem solid #93c5fd;
+  outline-offset: 0.2rem;
+}
+.adm_switch input[type='checkbox']:disabled + .adm_switch_track {
+  opacity: 0.55;
+}
+.adm_switch.is-busy {
+  cursor: progress;
+}
+.adm_btn_edit {
+  height: 3rem;
+  padding: 0 1rem;
+  background: #fff;
+  color: #2563eb;
+  border: 1px solid #2563eb;
+  border-radius: 0.4rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.adm_btn_edit:hover {
+  background: #eff6ff;
+}
+.adm_btn_edit:disabled {
+  color: #93c5fd;
+  border-color: #93c5fd;
+  cursor: not-allowed;
+}
+.adm_btn_delete {
+  height: 3rem;
+  padding: 0 1rem;
+  background: #fff;
+  color: #dc2626;
+  border: 1px solid #dc2626;
+  border-radius: 0.4rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.adm_btn_delete:hover {
+  background: #fef2f2;
+}
+.adm_pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.6rem 2rem;
+  border-top: 1px solid #e5e7eb;
+}
+.adm_pagination_left {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+.adm_total_count {
+  font-size: 1.3rem;
+  color: #6b7280;
+}
+
+/* 목록 상단 헤더 (카운트 좌측 + 등록 버튼 우측) */
+.adm_list_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.6rem 2rem;
+  border-bottom: 1px solid #e5e7eb;
+  gap: 1rem;
+}
+.adm_list_header .adm_btn_primary {
+  height: 3.8rem;
+  font-size: 1.3rem;
+}
+.adm_list_header_actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-shrink: 0;
+}
+/* 목록 체크박스 열 (선택 삭제) */
+.adm_table th input[type='checkbox'],
+.adm_table td input[type='checkbox'] {
+  width: 1.6rem;
+  height: 1.6rem;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+/* ── 메인 빈 상태 ──────────────────────────────────────── */
+.home_empty {
+  color: #9ca3af;
+  font-size: 1.4rem;
+  text-align: center;
+  padding: 4rem 0;
+}
+.adm_page_btns {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.adm_page_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.6rem;
+  height: 3.6rem;
+  padding: 0 0.9rem;
+  font-family: inherit;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #475569;
+  background: #fff;
+  border: 1px solid #e5e9f0;
+  border-radius: 99rem;
+  cursor: pointer;
+  transition:
+    color 0.16s ease,
+    background-color 0.16s ease,
+    border-color 0.16s ease,
+    box-shadow 0.16s ease;
+}
+.adm_page_btn .material-icons {
+  font-size: 2rem;
+}
+.adm_page_btn:hover:not(:disabled) {
+  color: #1d4ed8;
+  background: #f4f8ff;
+  border-color: #c9d9fb;
+}
+.adm_page_btn.active {
+  color: #fff;
+  background: linear-gradient(120deg, #1d4ed8 0%, #2563eb 100%);
+  border-color: #2563eb;
+  box-shadow: 0 0.6rem 1.6rem -0.6rem rgba(37, 99, 235, 0.7);
+}
+.adm_page_btn:disabled {
+  color: #cbd5e1;
+  background: #f8fafc;
+  border-color: #eef2f7;
+  cursor: not-allowed;
+}
+.adm_page_btn:focus-visible {
+  outline: 0.2rem solid #93c5fd;
+  outline-offset: 0.2rem;
+}
+
+/* ── 관리자 게시글 작성/수정 폼 ─────────────────────── */
+.adm_post_form {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+.adm_post_form .adm_form_field label {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.6rem;
+}
+.adm_post_form .adm_form_field input {
+  height: 4.4rem;
+  padding: 0 1.2rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.6rem;
+  font-size: 1.4rem;
+  width: 100%;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+.adm_post_form .adm_form_field input:focus {
+  border-color: #2563eb;
+}
+.adm_post_form .adm_form_field textarea {
+  padding: 1.2rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.6rem;
+  font-size: 1.4rem;
+  width: 100%;
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+  font-family: inherit;
+  line-height: 1.6;
+  transition: border-color 0.15s;
+}
+.adm_post_form .adm_form_field textarea:focus {
+  border-color: #2563eb;
+}
+.adm_required {
+  color: #dc2626;
+}
+.adm_form_actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+.adm_form_actions .adm_btn_secondary,
+.adm_form_actions .adm_btn_primary {
+  height: 4.4rem;
+  padding: 0 2.4rem;
+  font-size: 1.4rem;
+}
+
+/* ── adm_form 계열 (보도자료·채용·건강정보 폼) ── */
+.adm_form {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.adm_form_row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.4rem 0;
+}
+.adm_form_row_col {
+  flex-direction: column;
+  align-items: stretch;
+}
+.adm_form_label {
+  min-width: 12rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #374151;
+  flex-shrink: 0;
+  line-height: 1.5;
+}
+.adm_form_row_col .adm_form_label {
+  margin-bottom: 0.6rem;
+}
+.adm_form_input {
+  flex: 1;
+  height: 4.4rem;
+  padding: 0 1.2rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.6rem;
+  font-size: 1.4rem;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+  background: #fff;
+}
+.adm_form_input:focus {
+  border-color: #2563eb;
+}
+.adm_checkbox_label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  font-size: 1.4rem;
+  color: #374151;
+}
+.adm_checkbox_label input[type='checkbox'] {
+  width: 1.6rem;
+  height: 1.6rem;
+  accent-color: #2563eb;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.adm_form_btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+.adm_form_btns .adm_btn_secondary,
+.adm_form_btns .adm_btn_primary,
+.adm_form_btns .adm_btn_delete {
+  height: 4.4rem;
+  padding: 0 2.4rem;
+  font-size: 1.4rem;
+}
+.required {
+  color: #dc2626;
+}
+
+/* ── 메디TV 폼 ── */
+.medi_tv_form_column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  flex: 1;
+}
+.medi_tv_form_column .adm_form_input {
+  flex: unset;
+  width: 100%;
+}
+.medi_tv_preview {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  border-radius: 0.6rem;
+  border: 1px solid #e5e7eb;
+  display: block;
+}
+
+/* ── 상태 배지 ── */
+.adm_status_badge {
+  display: inline-block;
+  padding: 0.2rem 0.8rem;
+  border-radius: 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.adm_status_done {
+  background: #dcfce7;
+  color: #16a34a;
+}
+.adm_status_wait {
+  background: #fef9c3;
+  color: #b45309;
+}
+
+/* ── 상세 보기 테이블 ── */
+.adm_view_table_wrap {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.6rem;
+  overflow: hidden;
+}
+.adm_view_table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.4rem;
+}
+.adm_view_table th,
+.adm_view_table td {
+  padding: 1.2rem 1.6rem;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+  vertical-align: middle;
+  line-height: 1.6;
+}
+.adm_view_table tr:last-child th,
+.adm_view_table tr:last-child td {
+  border-bottom: none;
+}
+.adm_view_table th {
+  width: 12rem;
+  background: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+  white-space: nowrap;
+}
+.adm_view_content {
+  line-height: 1.8;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+.adm_view_content img {
+  max-width: 100%;
+}
+.adm_empty_text {
+  color: #9ca3af;
+}
+
+/* ── 답변 섹션 ── */
+.adm_reply_section {
+  margin-top: 2.4rem;
+}
+.adm_reply_header {
+  display: flex;
+  align-items: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1e3a5f;
+  border-bottom: 2px solid #1e3a5f;
+  margin-bottom: 0;
+  padding:1rem;
+}
+.adm_reply_textarea {
+  width: 100%;
+  padding: 1.2rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.6rem;
+  font-size: 1.4rem;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+  line-height: 1.6;
+  transition: border-color 0.15s;
+}
+.adm_reply_textarea:focus {
+  border-color: #2563eb;
+}
+
+/* ── 삭제 버튼 비활성 ─────────────────────────────── */
+.adm_btn_delete:disabled {
+  color: #fca5a5;
+  border-color: #fca5a5;
+  background: #fff;
+  cursor: not-allowed;
+}
+
+/* 상태 배지 재정의 (게시판 참고용 .adm_status_badge가 덮어쓰지 않도록 끝에 배치) */
+.adm_status_badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 1rem;
+  border-radius: 2rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* ─────────────────────────────────────────────────────
+   jQuery UI datepicker 확대
+   (html { font-size:10px } 기준, 1rem = 10px)
+   - jquery-ui.css가 뒤에 로드되어도 확실히 적용되도록 !important 사용
+   ───────────────────────────────────────────────────── */
+.ui-datepicker {
+  width: 34rem !important;
+  padding: 1.2rem !important;
+  font-size: 1.5rem !important;
+  font-family: 'Pretendard', dotum, sans-serif !important;
+  background: #fff !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 0.8rem !important;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.12) !important;
+  z-index: 1000 !important;
+}
+.ui-datepicker .ui-datepicker-header {
+  padding: 0.4rem 0.4rem 1rem !important;
+  background: none !important;
+  border: 0 !important;
+  font-weight: 600 !important;
+}
+.ui-datepicker .ui-datepicker-title {
+  font-size: 1.6rem !important;
+  line-height: 1.6 !important;
+  color: #111827 !important;
+}
+.ui-datepicker .ui-datepicker-title select {
+  height: 3rem !important;
+  padding: 0 0.8rem !important;
+  margin: 0 0.2rem !important;
+  font-size: 1.4rem !important;
+  color: #111 !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 0.4rem !important;
+  background: #fff !important;
+}
+.ui-datepicker .ui-datepicker-title select:focus {
+  border-color: #2563eb !important;
+}
+.ui-datepicker .ui-datepicker-prev,
+.ui-datepicker .ui-datepicker-next {
+  top: 0.8rem !important;
+  width: 2.6rem !important;
+  height: 2.6rem !important;
+  border-radius: 0.4rem !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.ui-datepicker .ui-datepicker-prev {
+  left: 0.4rem !important;
+}
+.ui-datepicker .ui-datepicker-next {
+  right: 0.4rem !important;
+}
+.ui-datepicker .ui-datepicker-prev:hover,
+.ui-datepicker .ui-datepicker-next:hover {
+  background: #eff6ff !important;
+}
+.ui-datepicker .ui-datepicker-prev span.ui-icon,
+.ui-datepicker .ui-datepicker-next span.ui-icon {
+  display: none !important;
+}
+/* 좌우 이동 화살표도 Material Icons 로 통일 (ligature 로 아이콘 이름을 그린다) */
+.ui-datepicker .ui-datepicker-prev::after {
+  content: 'chevron_left' !important;
+  font-family: 'Material Icons' !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  font-size: 2.2rem !important;
+  line-height: 1 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  white-space: nowrap !important;
+  -webkit-font-feature-settings: 'liga' !important;
+  font-feature-settings: 'liga' !important;
+  -webkit-font-smoothing: antialiased !important;
+  color: #374151 !important;
+}
+.ui-datepicker .ui-datepicker-next::after {
+  content: 'chevron_right' !important;
+  font-family: 'Material Icons' !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  font-size: 2.2rem !important;
+  line-height: 1 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  white-space: nowrap !important;
+  -webkit-font-feature-settings: 'liga' !important;
+  font-feature-settings: 'liga' !important;
+  -webkit-font-smoothing: antialiased !important;
+  color: #374151 !important;
+}
+.ui-datepicker .ui-datepicker-calendar {
+  width: 100% !important;
+  margin: 0 !important;
+  font-size: 1.4rem !important;
+}
+.ui-datepicker .ui-datepicker-calendar th {
+  padding: 0.6rem 0 !important;
+  font-size: 1.3rem !important;
+  font-weight: 600 !important;
+  color: #6b7280 !important;
+}
+.ui-datepicker .ui-datepicker-calendar td {
+  padding: 0.2rem !important;
+  text-align: center !important;
+  border: 0 !important;
+}
+.ui-datepicker .ui-datepicker-calendar td a,
+.ui-datepicker .ui-datepicker-calendar td span {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 4rem !important;
+  height: 4rem !important;
+  padding: 0 !important;
+  font-size: 1.4rem !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  color: #111 !important;
+  background: none !important;
+  border: 0 !important;
+  border-radius: 0.4rem !important;
+}
+.ui-datepicker .ui-datepicker-calendar td a:hover {
+  background: #eff6ff !important;
+  color: #2563eb !important;
+}
+.ui-datepicker .ui-datepicker-calendar td a.ui-state-highlight {
+  background: #dbeafe !important;
+  color: #1d4ed8 !important;
+}
+.ui-datepicker .ui-datepicker-calendar td a.ui-state-active {
+  background: #2563eb !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+}
+.ui-datepicker .ui-datepicker-calendar td a.ui-state-active:hover {
+  background: #1d4ed8 !important;
+  color: #fff !important;
+}
+
+/* ─────────────────────────────────────────────────────
+   게시판(공지사항/자료실) 전용
+   ───────────────────────────────────────────────────── */
+/* 본문 입력 textarea */
+.adm_form textarea.adm_board_textarea {
+  flex: none;
+  width: 100%;
+  min-height: 32rem;
+  padding: 1.2rem;
+  resize: vertical;
+  line-height: 1.7;
+  font-family: inherit;
+}
+
+/* 상세 보기 (읽기 전용) */
+.adm_view_header {
+  padding: 2rem 2rem 1.4rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+.adm_view_title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #111;
+  line-height: 1.5;
+  word-break: break-word;
+  margin: 0 0 1rem;
+}
+.adm_view_meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem 2rem;
+  font-size: 1.3rem;
+  color: #6b7280;
+}
+.adm_view_meta strong {
+  color: #374151;
+  font-weight: 600;
+}
+.adm_view_body {
+  padding: 2.4rem 2rem;
+  border-bottom: 1px solid #e5e7eb;
+  min-height: 10rem;
+}
+.adm_view_body .adm_view_content {
+  margin: 0;
+  white-space: pre-wrap;
+}
+.adm_view_files {
+  padding: 1.6rem 2rem 2rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+.adm_view_files_title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.8rem;
+}
+.adm_view_files_title .material-icons {
+  font-size: 1.8rem;
+}
+.adm_view_files .adm_file_list {
+  margin-bottom: 0;
+}
+.adm_view_actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  padding: 1.6rem 2rem;
+}
+.adm_view_actions .adm_btn_secondary,
+.adm_view_actions .adm_btn_edit,
+.adm_view_actions .adm_btn_delete {
+  height: 4.2rem;
+  padding: 0 2rem;
+  font-size: 1.4rem;
+  border-radius: 0.6rem;
+}
+
+/* 첨부파일 목록 (참고용 editor.css 미사용 → admin.css에 포함) */
+.adm_file_list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.adm_file_item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.4rem;
+  padding: 0.6rem 1rem;
+}
+.adm_file_item.adm_file_new {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+.adm_file_name {
+  flex: 1;
+  font-size: 1.3rem;
+  color: #374151;
+  text-decoration: none;
+  word-break: break-all;
+}
+a.adm_file_name:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+.adm_file_del {
+  flex-shrink: 0;
+  width: 2.4rem;
+  height: 2.4rem;
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 1.4rem;
+  cursor: pointer;
+  line-height: 1;
+  border-radius: 0.3rem;
+  transition:
+    color 0.15s,
+    background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.adm_file_del .material-icons {
+  font-size: 1.6rem;
+}
+.adm_file_del:hover {
+  color: #dc2626;
+  background: #fef2f2;
+}
+.adm_file_btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  line-height: 4rem;
+  padding: 0 1.6rem;
+  border-radius: 0.6rem;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #111;
+  cursor: pointer;
+  margin-top: 0.6rem;
+  border: 1px solid #ddd;
+  background: #fff;
+}
+.adm_file_btn:hover {
+  background: #f3f4f6;
+}
+.adm_file_btn .material-icons {
+  font-size: 1.8rem;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+/* 공지 구분 배지 (일반공지 / 시스템공지) */
+.adm_notice_badge {
+  display: inline-block;
+  margin-right: 0.6rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 0.4rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.6;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.adm_notice_normal {
+  background: #e5e7eb;
+  color: #374151;
+}
+.adm_notice_system {
+  background: #ef4444;
+  color: #fff;
+}
+
+/* 폼 셀렉트 (등록/수정 공지 구분 등) */
+.adm_form_select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23374151' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 3rem;
+  cursor: pointer;
+}
+
+/* 결제 페이지 (갤러리 - 샘플) */
+.adm_payment_page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f3f4f6;
+}
+.adm_payment_top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.6rem 2.4rem;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
+.adm_payment_brand {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #1e3a5f;
+  margin: 0;
+}
+.adm_payment_top .adm_btn_secondary {
+  height: 3.8rem;
+  padding: 0 1.6rem;
+}
+.adm_payment_main {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 4rem 2rem;
+}
+.adm_payment_card {
+  width: 100%;
+  max-width: 56rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+.adm_payment_body {
+  padding: 3.2rem;
+}
+.adm_payment_title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 0.8rem;
+}
+.adm_payment_desc {
+  font-size: 1.4rem;
+  color: #6b7280;
+  line-height: 1.7;
+  margin: 0 0 2.4rem;
+}
+.adm_payment_loading {
+  font-size: 1.4rem;
+  color: #9ca3af;
+  text-align: center;
+  padding: 3rem 0;
+}
+.adm_payment_info {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.8rem;
+  overflow: hidden;
+  margin-bottom: 2.4rem;
+}
+.adm_payment_row {
+  display: flex;
+  align-items: center;
+  padding: 1.4rem 2rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+.adm_payment_row:last-child {
+  border-bottom: none;
+}
+.adm_payment_label {
+  width: 12rem;
+  font-size: 1.4rem;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+.adm_payment_value {
+  font-size: 1.5rem;
+  color: #111;
+  font-weight: 500;
+}
+.adm_payment_amount {
+  flex: 1;
+  text-align: right;
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #2563eb;
+}
+.adm_payment_btn {
+  width: 100%;
+  justify-content: center;
+}
+.adm_payment_notice {
+  font-size: 1.2rem;
+  color: #9ca3af;
+  margin: 1.6rem 0 0;
+  text-align: center;
+}
+
+/* 결제 상태 배지 (입점신청 관리) */
+.adm_pay_pending {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+.adm_pay_paid {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+/* 주소 입력 - 주소검색 버튼 높이를 입력필드(.adm_form_input 4.4rem)와 동일하게 */
+.adm_address_btn {
+  height: 4.4rem;
+  padding: 0 1.6rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  background:#666;
+  color:#fff;
+}
+.adm_address_btn:hover {
+  background: #444;
+}
+
+/* 상세주소 입력 (기본주소 입력 바로 아래) */
+.adm_detail_address {
+  flex: none;
+  width: 100%;
+}
+
+/* ── 결제 페이지 - 월정액/자동결제 (갤러리) ── */
+.adm_payment_amount_unit {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin-left: 0.2rem;
+}
+.adm_payment_section {
+  margin-bottom: 2.4rem;
+}
+.adm_payment_subtitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #111;
+  margin: 0 0 1rem;
+}
+.adm_paymethod {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.8rem;
+  padding: 1.2rem 1.4rem;
+  cursor: pointer;
+  margin-bottom: 0.8rem;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+}
+.adm_paymethod:hover {
+  border-color: #93c5fd;
+}
+.adm_paymethod:has(input:checked) {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+.adm_paymethod input {
+  width: 1.7rem;
+  height: 1.7rem;
+  margin-top: 0.2rem;
+  accent-color: #2563eb;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.adm_paymethod_body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  line-height: 1.5;
+}
+.adm_paymethod_body strong {
+  font-size: 1.4rem;
+  color: #111;
+  font-weight: 600;
+}
+.adm_paymethod_body em {
+  font-style: normal;
+  font-size: 1.2rem;
+  color: #6b7280;
+}
+.adm_payagree {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.8rem;
+  padding: 1.2rem 1.4rem;
+  margin-bottom: 1.6rem;
+  cursor: pointer;
+  font-size: 1.3rem;
+  color: #374151;
+  line-height: 1.6;
+}
+.adm_payagree input {
+  width: 1.7rem;
+  height: 1.7rem;
+  margin-top: 0.1rem;
+  accent-color: #2563eb;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.adm_payagree .adm_required_txt {
+  color: #dc2626;
+  font-style: normal;
+}
+
+/* ── 로그인 상태 안내 (대기/거절/오류) ── */
+.admin_login_notice {
+  font-size: 1.3rem;
+  line-height: 1.7;
+  border-radius: 0.6rem;
+  padding: 1rem 1.3rem;
+  margin-bottom: 1.4rem;
+  word-break: break-word;
+  white-space: pre-line;
+}
+.admin_login_notice.pending {
+  color: #1d4ed8;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+.admin_login_notice.rejected {
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+.admin_login_notice.error {
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+/* ── 갤러리소개 관리 (갤러리관리 > 갤러리소개) ── */
+/* 섹션 제목 아래 본문 영역: 폼(.adm_form padding 2rem)과 좌우 여백을 맞춤 */
+.adm_section_body {
+  padding: 0;
+}
+
+/* 대표 이미지: 미리보기 + 업로드/삭제 액션 */
+.adm_thumb_row {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.adm_thumb_preview {
+  width: 24rem; /* 기존 12rem의 2배 */
+  height: 18rem;
+  object-fit: cover;
+  border-radius: 0.6rem;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  flex-shrink: 0;
+}
+
+.adm_thumb_actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  padding-top: 0.2rem;
+}
+
+.adm_thumb_actions .adm_file_btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 1.6rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #2563eb;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.adm_thumb_actions .adm_file_btn:hover {
+  background: #dbeafe;
+}
+
+.adm_thumb_delete {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 1rem 1.6rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #b91c1c;
+  background: #fff;
+  border: 1px solid #fecaca;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.adm_thumb_delete:hover {
+  background: #fef2f2;
+}
+
+.adm_thumb_delete .material-icons {
+  font-size: 1.8rem;
+}
+
+.adm_thumb_hint {
+  font-size: 1.2rem;
+  color: #9ca3af;
+}
+
+/* 상세 소개 텍스트박스 */
+.adm_content_textarea {
+  width:100%;
+  height: 20rem !important;
+  padding: 1.2rem 1.4rem;
+  line-height: 1.6;
+  resize: vertical;
+  resize:none;
+}
+
+/* 전시관리 등록/수정: 전시개요 · 약력 (세로 높이 확대) */
+.adm_ex_textarea {
+  height: 34rem !important;
+  min-height: 34rem;
+  resize: vertical;
+}
+
+/* 전시관리 등록/수정: 참여작가 (한 줄에 한 명씩 — 개요/약력보다는 짧게) */
+.adm_ex_textarea_artists {
+  height: 20rem !important;
+  min-height: 20rem;
+  resize: vertical;
+}
+
+/* 전시장관리 등록/수정: 전시장 정보 (세로 높이 확대) */
+.adm_venue_textarea {
+  height: 36rem !important;
+  min-height: 36rem;
+  resize: vertical;
+}
+
+/* ── 전시관리 (갤러리관리 > 전시관리) ── */
+/* 목록 내 대표이미지 썸네일 */
+.adm_thumb_cell {
+  max-width: 16rem;
+  height: 12rem;
+  object-fit: cover;
+  border-radius: 0.4rem;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  vertical-align: middle;
+}
+
+.adm_thumb_cell_empty {
+  color: #cbd5e1;
+}
+
+/* 전시 구분 배지 (ex_status: current/upcoming/ended) — 목록·상세 공용 */
+.adm_ex_current,
+.adm_ex_upcoming,
+.adm_ex_ended {
+  display: inline-block;
+  padding: 0.3rem 1rem;
+  border-radius: 1rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.adm_ex_current {
+  color: #1d4ed8;
+  background: #dbeafe;
+}
+
+.adm_ex_upcoming {
+  color: #b45309;
+  background: #fef3c7;
+}
+
+.adm_ex_ended {
+  color: #4b5563;
+  background: #e5e7eb;
+}
+
+/* ── 전시관리: 작품이미지 다중 업로드 그리드 ── */
+.adm_ex_images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  align-content: flex-start;
+  min-height: 12rem; /* 드래그 앤 드롭 영역 확보 */
+  padding: 0.6rem;
+  margin: -0.6rem;
+  border-radius: 0.8rem;
+  border: 1.5px dashed transparent;
+  transition:
+    border-color 0.15s,
+    background-color 0.15s;
+}
+
+.adm_ex_images.dragover {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.adm_ex_image {
+  position: relative;
+  margin: 0;
+  width: 16rem;
+  height: 12rem;
+  flex-shrink: 0;
+  cursor: grab;
+}
+
+.adm_ex_image:active {
+  cursor: grabbing;
+}
+
+.adm_ex_image.dragging {
+  opacity: 0.55;
+}
+
+.adm_ex_image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.6rem;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  display: block;
+  pointer-events: none; /* 이미지 자체 드래그 방지 */
+}
+
+/* 순서 번호 (좌하단) */
+.adm_ex_image_idx {
+  position: absolute;
+  left: 0.6rem;
+  bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.4rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 1rem;
+  pointer-events: none;
+}
+
+/* 드래그 핸들 아이콘 (우하단) */
+.adm_ex_image_drag {
+  position: absolute;
+  right: 0.6rem;
+  bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 0.4rem;
+  pointer-events: none;
+}
+
+.adm_ex_image_drag .material-icons {
+  font-size: 1.7rem;
+}
+
+.adm_ex_image_badge {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  padding: 0.2rem 0.8rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #fff;
+  background: #2563eb;
+  border-radius: 1rem;
+}
+
+.adm_ex_image_del {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.adm_ex_image_del:hover {
+  background: #dc2626;
+}
+
+.adm_ex_image_del .material-icons {
+  font-size: 1.6rem;
+}
+
+.adm_ex_image_add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 16rem;
+  height: 12rem;
+  color: #6b7280;
+  background: #f9fafb;
+  border: 1px dashed #cbd5e1;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  font-size: 1.3rem;
+  font-family: inherit;
+  transition: color 0.15s, border-color 0.15s, background-color 0.15s;
+}
+
+.adm_ex_image_add:hover {
+  color: #2563eb;
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.adm_ex_image_add .material-icons {
+  font-size: 2.4rem;
+}
+
+/* ── 전시장관리: 도면 썸네일 (1장 - 전시장 이미지와 동일 그리드) ── */
+.adm_floorplan_item {
+  cursor: default;
+}
+
+.adm_floorplan_item .adm_ex_image_badge {
+  background: #7c3aed; /* 도면임을 구분 */
+}
+
+/* PDF 등 이미지가 아닌 도면 placeholder */
+.adm_floorplan_placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+  color: #64748b;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.6rem;
+  text-align: center;
+}
+
+.adm_floorplan_placeholder .material-icons {
+  font-size: 3.4rem;
+  color: #94a3b8;
+}
+
+.adm_floorplan_name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  color: #475569;
+  word-break: break-all;
+}
+
+/* ── 대관신청환경설정 (갤러리관리 > 대관정보관리) ── */
+
+/* ── 대관신청동의관리 (갤러리관리 > 대관정보관리) ── */
+.adm_ra_textarea {
+  width: 100%;
+  min-height: 42rem;
+  padding: 1.4rem 1.6rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.6rem;
+  font-size: 1.4rem;
+  line-height: 1.7;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+  background: #fff;
+  resize: vertical;
+  transition: border-color 0.15s;
+}
+.adm_ra_textarea:focus {
+  border-color: #2563eb;
+}
+
+/* ── 대관신청환경설정 (갤러리관리 > 대관정보관리) ── */
+.adm_rs_title {
+  margin: 0.8rem 0 1rem;
+  padding-bottom: 0.8rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #111827;
+  border-bottom: 1px solid #eef2f7;
+}
+.adm_rs_title:not(:first-child) {
+  margin-top: 2.4rem;
+  padding-top: 2.4rem;
+  border-top: 1px solid #e5e7eb;
+}
+.adm_rs_date_row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.adm_rs_date_clear {
+  height: 3.8rem;
+  padding: 0 1.2rem;
+}
+.adm_rs_unit {
+  font-size: 1.4rem;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+.adm_rs_eq {
+  font-size: 1.3rem;
+  color: #9ca3af;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* ── 대관신청관리 (갤러리관리 > 대관정보관리) ── */
+.adm_rr_badge {
+  display: inline-block;
+  padding: 0.35rem 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.adm_rr_badge.is-pending {
+  color: #b45309;
+  background: #fef3c7;
+}
+.adm_rr_badge.is-confirmed {
+  color: #1d4ed8;
+  background: #dbeafe;
+}
+.adm_rr_badge.is-rejected {
+  color: #dc2626;
+  background: #fee2e2;
+}
+
+/* 결제 상태 배지 (결제전/결제완료) */
+.adm_rr_pay_badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: 0.6rem;
+  padding: 0.35rem 1rem 0.35rem 0.7rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border: 1px solid;
+  border-radius: 999px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.adm_rr_pay_badge .material-icons {
+  font-size: 1.5rem;
+}
+.adm_rr_pay_badge.is-unpaid {
+  color: #b45309;
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+.adm_rr_pay_badge.is-paid {
+  color: #047857;
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+}
+/* 상세 정보 행 안에서는 좌측 여백 제거 */
+.adm_rr_dl_row dd .adm_rr_pay_badge {
+  margin-left: 0;
+  vertical-align: initial;
+}
+/* 값 없음 표시 */
+.adm_td_dim {
+  color: #9ca3af;
+}
+
+/* 확인 유무 */
+.adm_rr_view {
+  display: inline-block;
+  padding: 0.35rem 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.adm_rr_view.is-new {
+  color: #b45309;
+  background: #fef3c7;
+}
+.adm_rr_view.is-read {
+  color: #4b5563;
+  background: #f3f4f6;
+}
+
+.adm_rr_section {
+  margin: 2rem 0 0.8rem;
+  padding-bottom: 0.6rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  border-bottom: 1px solid #e5e7eb;
+}
+.adm_rr_body {
+  padding: 0.2rem 2.4rem 2.6rem;
+}
+.adm_rr_body .adm_rr_section:first-child {
+  margin-top: 1.8rem;
+}
+.adm_rr_dl {
+  display: flex;
+  flex-direction: column;
+}
+.adm_rr_dl_row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px dashed #eef2f7;
+}
+.adm_rr_dl_row dt {
+  flex: 0 0 12rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+.adm_rr_dl_row dd {
+  flex: 1;
+  margin: 0;
+  font-size: 1.4rem;
+  color: #111827;
+  word-break: break-all;
+}
+.adm_rr_memo {
+  white-space: pre-line;
+}
+/* 약력 소개 항목 (텍스트) */
+.adm_rr_bio {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.adm_rr_bio li {
+  position: relative;
+  padding-left: 1.4rem;
+  font-size: 1.4rem;
+  line-height: 1.6;
+  color: #111827;
+  word-break: break-all;
+}
+.adm_rr_bio li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.75em;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: #2563eb;
+}
+.adm_rr_ports {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.adm_rr_port {
+  display: block;
+  width: 12rem;
+  height: 9rem;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.6rem;
+  background: #f9fafb;
+  cursor: zoom-in;
+}
+.adm_rr_port img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.adm_rr_reject {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  padding: 1rem 1.2rem;
+  font-size: 1.35rem;
+  color: #b45309;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 0.6rem;
+}
+.adm_rr_reject .material-icons {
+  font-size: 1.9rem;
+}
+.adm_rr_status_btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+.adm_rr_status_btns .adm_btn_primary,
+.adm_rr_status_btns .adm_btn_secondary,
+.adm_rr_status_btns .adm_btn_delete {
+  height: 4.2rem;
+  padding: 0 2rem;
+  font-size: 1.35rem;
+}
+.adm_rr_status_btns button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── 결제 전 개인정보 마스킹 (직거래 방지) ── */
+.adm_rr_blind_notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-top: 1.8rem;
+  padding: 1.4rem 1.6rem;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 0.8rem;
+}
+.adm_rr_blind_notice .material-icons {
+  flex-shrink: 0;
+  font-size: 2.2rem;
+  color: #c2410c;
+}
+.adm_rr_blind_notice_text strong {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #9a3412;
+}
+.adm_rr_blind_notice_text p {
+  margin: 0.4rem 0 0;
+  font-size: 1.3rem;
+  line-height: 1.6;
+  color: #b45309;
+}
+.adm_rr_blind {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+/* 흐릿한 마스킹 — 값은 보이지 않지만 영역은 유지 */
+.adm_rr_blind .adm_rr_blind_text {
+  filter: blur(0.55rem);
+  -webkit-filter: blur(0.55rem);
+  color: #4b5563;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+}
+.adm_rr_blind .adm_rr_blind_tag {
+  flex-shrink: 0;
+  padding: 0.25rem 0.9rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #b45309;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* 결제 처리 행 */
+.adm_rr_pay_row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  margin-top: 1.6rem;
+  padding: 1.2rem 1.4rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.8rem;
+}
+.adm_rr_pay_row_label {
+  margin-right: auto;
+  font-size: 1.3rem;
+  color: #6b7280;
+}
+.adm_rr_pay_row .adm_btn_primary,
+.adm_rr_pay_row .adm_btn_secondary {
+  height: 4.2rem;
+  padding: 0 2rem;
+  font-size: 1.35rem;
+}
+.adm_rr_pay_row button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── 입점 재검수 신청 (반려된 갤러리 전용 단독 화면) ── */
+.adm_form_error {
+  margin-top: 0.4rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #dc2626;
+}
+.adm_reapply_wrap {
+  min-height: 100vh;
+  padding: 0 2.4rem 6rem;
+  background: #f9fafb;
+}
+.adm_reapply_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+.adm_reapply_logo {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #1d4ed8;
+}
+.adm_reapply_main {
+  max-width: 72rem;
+  margin: 0 auto;
+}
+.adm_reapply_box {
+  padding: 3.2rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1.2rem;
+  box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.04);
+}
+.adm_reapply_title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #111827;
+}
+.adm_reapply_desc {
+  margin-top: 1rem;
+  font-size: 1.4rem;
+  line-height: 1.7;
+  color: #6b7280;
+}
+.adm_reapply_reject {
+  margin-top: 1.6rem;
+  padding: 1.4rem 1.8rem;
+  font-size: 1.4rem;
+  line-height: 1.7;
+  color: #991b1b;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 0.8rem;
+}
+.adm_reapply_reject p {
+  margin-top: 0.4rem;
+  white-space: pre-line;
+}
+.adm_reapply_addr {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+}
+.adm_reapply_addr .adm_form_input {
+  flex: 1;
+}
+.adm_reapply_file {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.3rem;
+  color: #6b7280;
+}
+.adm_reapply_file a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* ── 전시장관리: 대관료 옵션 입력 ── */
+.adm_fee_opts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 100%;
+}
+.adm_fee_opt {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+/* 대관료 입력 행: [금액] [비고] [삭제] */
+.adm_fee_opt .adm_form_input:first-child {
+  flex: 0 0 16rem;
+}
+.adm_fee_opt .adm_form_input:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+.adm_fee_opt .adm_btn_delete {
+  flex: 0 0 auto;
+}
+
+/* ── 전자대관계약 (관리자 대관신청 상세) ── */
+.adm_rr_contract_badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border: 1px solid;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.adm_rr_contract_badge.is-none {
+  color: #475569;
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+}
+.adm_rr_contract_badge.is-member_signed {
+  color: #1d4ed8;
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+.adm_rr_contract_badge.is-completed {
+  color: #047857;
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+}
+.adm_rr_contract_badge .material-icons {
+  font-size: 1.5rem;
+}
+/* 목록/상세 헤더(제목 옆)에서는 결제 배지와 나란히 정렬 */
+.adm_total_count .adm_rr_contract_badge {
+  margin-left: 0.6rem;
+  vertical-align: middle;
+}
+/* 상세 정보 행 안에서는 좌측 여백 제거 */
+.adm_rr_dl_row dd .adm_rr_contract_badge {
+  margin-left: 0;
+  vertical-align: initial;
+}
+.adm_rr_sign {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.adm_rr_sign img {
+  width: 14rem;
+  height: 6rem;
+  object-fit: contain;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.6rem;
+}
+.adm_rr_sign_meta {
+  font-size: 1.25rem;
+  color: #6b7280;
+}
+.adm_rr_contract_row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  margin-top: 1.6rem;
+  padding: 1.2rem 1.4rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.8rem;
+}
+.adm_rr_contract_row_label {
+  margin-right: auto;
+  font-size: 1.3rem;
+  color: #6b7280;
+}
+.adm_rr_contract_row .adm_btn_primary,
+.adm_rr_contract_row .adm_btn_secondary,
+.adm_rr_contract_row .adm_btn_delete {
+  height: 4.2rem;
+  padding: 0 2rem;
+  font-size: 1.35rem;
+}
+
+/* ── 대시보드 알림 카드 (대관신청 / 전자계약 작성 / 결제) ── */
+.adm_dash_caption {
+  margin: 0 0 2.8rem;
+  font-size: 1.35rem;
+  color: #6b7280;
+}
+.adm_dash_cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2.4rem;
+}
+.adm_dash_card {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  padding: 3.2rem 3rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1.2rem;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+.adm_dash_card:hover {
+  border-color: #93c5fd;
+  box-shadow: 0 0.6rem 1.6rem rgba(37, 99, 235, 0.12);
+  transform: translateY(-0.2rem);
+}
+.adm_dash_card.is-active {
+  border-color: #bfdbfe;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+}
+.adm_dash_icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 5.6rem;
+  height: 5.6rem;
+  border-radius: 1.2rem;
+  background: #eff6ff;
+  color: #2563eb;
+}
+.adm_dash_icon .material-icons {
+  font-size: 3rem;
+}
+.adm_dash_card.is-idle .adm_dash_icon {
+  background: #f1f5f9;
+  color: #94a3b8;
+}
+.adm_dash_body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.adm_dash_title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #111827;
+}
+.adm_dash_desc {
+  font-size: 1.25rem;
+  color: #6b7280;
+}
+.adm_dash_count {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.2rem;
+  flex: 0 0 auto;
+  font-size: 3.2rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #2563eb;
+}
+.adm_dash_count em {
+  font-size: 1.3rem;
+  font-style: normal;
+  font-weight: 600;
+  color: #9ca3af;
+}
+.adm_dash_card.is-idle .adm_dash_count {
+  color: #cbd5e1;
+}
+
+/* 보조 현황 (참고용) */
+.adm_dash_meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem 3.6rem;
+  margin-top: 3.2rem;
+  padding: 2rem 2.4rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.8rem;
+}
+.adm_dash_meta_item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: 1.3rem;
+}
+.adm_dash_meta_label {
+  color: #6b7280;
+}
+.adm_dash_meta_value {
+  color: #111827;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .adm_dash_cards {
+    grid-template-columns: 1fr;
+  }
+  .adm_dash_count {
+    font-size: 2.6rem;
+  }
+}
+
+/* ==========================================
+   전시정보 (갤러리관리 > 전시정보)
+   ========================================== */
+/* 상세 상단 액션 (공개 페이지 보기 / 대관신청 보기 / 목록으로) */
+.adm_ex_top_actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+/* 안내 박스 (자동 등록 설명) */
+.adm_ex_notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  margin: 0;
+  padding: 1.4rem 1.6rem;
+  font-size: 1.35rem;
+  line-height: 1.6;
+  color: #1e40af;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 0.8rem;
+}
+.adm_ex_notice .material-icons {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+/* 한 행에 여러 컨트롤 (셀렉트 2개 / 날짜 2개 등) */
+.adm_ex_inline {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  flex: 1;
+  min-width: 0;
+}
+/* 전시기간 구분자 (~) */
+.adm_ex_period_sep {
+  flex: 0 0 auto;
+  color: #6b7280;
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1;
+}
+/* 작가 약력 항목 목록 */
+.adm_ex_bio_list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.adm_ex_bio_row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.adm_ex_bio_idx {
+  flex: 0 0 2rem;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #6b7280;
+}
+.adm_ex_bio_row .adm_form_input {
+  flex: 1;
+}
+.adm_ex_bio_row .adm_btn_delete {
+  flex-shrink: 0;
+  height: 4.4rem;
+  padding: 0 1.6rem;
+}
+
+/* 전시정보 상세: 전시 개요 (내용에 맞춰 높이 자동 조절 — 내부 스크롤 없음)
+   ※ .adm_content_textarea 의 height !important 를 피하려고 별도 클래스로 둔다.
+     (인라인 height 는 스타일시트 !important 를 이기지 못함) */
+.adm_ex_overview {
+  width: 100%;
+  min-height: 34rem;
+  padding: 1.2rem 1.4rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.6rem;
+  font-size: 1.4rem;
+  font-family: inherit;
+  line-height: 1.6;
+  color: #111827;
+  background: #fff;
+  box-sizing: border-box;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.adm_ex_overview:focus {
+  border-color: #2563eb;
+}
+
+/* 라벨 옆 컨트롤 + '신청서 원본' 안내를 세로로 묶는 래퍼 */
+.adm_ex_field {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.adm_ex_field > .adm_form_input {
+  flex: none;
+  width: 100%;
+}
+
+/* 신청서 원본과 다른 항목 안내 박스 (노란색) */
+.adm_ex_changed_box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1.4rem 1.6rem;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 0.8rem;
+}
+.adm_ex_changed_box > .material-icons {
+  font-size: 2rem;
+  color: #b45309;
+  flex-shrink: 0;
+}
+.adm_ex_changed_body {
+  flex: 1;
+  min-width: 0;
+}
+.adm_ex_changed_body strong {
+  display: block;
+  font-size: 1.35rem;
+  color: #92400e;
+}
+.adm_ex_changed_body p {
+  margin: 0.3rem 0 0;
+  font-size: 1.25rem;
+  color: #a16207;
+  word-break: break-word;
+}
+
+/* 항목별 '신청서 원본: …' 안내 */
+.adm_ex_origin {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: #b45309;
+  word-break: break-word;
+}
+.adm_ex_origin .material-icons {
+  font-size: 1.5rem;
+  color: #d97706;
+  flex-shrink: 0;
+}
+
+/* 목록 '수정됨' 배지 (신청서 원본과 다른 항목이 있는 전시) */
+.adm_ex_changed_tag {
+  display: inline-block;
+  margin-left: 0.6rem;
+  padding: 0.2rem 0.7rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #b45309;
+  background: #fef3c7;
+  border-radius: 1rem;
+  white-space: nowrap;
+}
+
+/* 공개상태 배지 (계산값: is_visible + 승인 + 계약 체결 + 결제 완료) */
+.adm_ex_pub {
+  display: inline-block;
+  padding: 0.3rem 1rem;
+  border-radius: 1rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+.adm_ex_pub.is-published {
+  color: #1d4ed8;
+  background: #dbeafe;
+}
+.adm_ex_pub.is-waiting {
+  color: #b45309;
+  background: #fef3c7;
+}
+.adm_ex_pub.is-hidden {
+  color: #4b5563;
+  background: #e5e7eb;
+}
+.adm_ex_pub.is-rejected {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+.adm_ex_pub.is-detached {
+  color: #6b7280;
+  background: #f3f4f6;
+}
+
+/* 공개상태 사유 안내문구 */
+.adm_ex_pub_reason {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: #6b7280;
+}
+
+/* ==========================================
+   전시장 3D 미리보기 입력 (3D 보기)
+   ========================================== */
+.adm_ex_3d {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  width: 100%;
+}
+
+.adm_ex_3d_sizes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1.2rem;
+}
+
+.adm_ex_3d_field {
+  display: flex;
+  flex: 1 1 14rem;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 11rem;
+}
+
+/* 필드 안에서는 입력폼이 세로로 늘어나지 않게 */
+.adm_ex_3d_field .adm_form_input {
+  flex: none;
+  width: 100%;
+}
+
+.adm_ex_3d_unit {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+/* 자동으로 계산된 값을 보여주는 칸 옆의 태그 (예: 세로 → 도면 비율로 자동) */
+.adm_ex_3d_auto_tag {
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+/* 자동 계산된 값은 수정할 수 없다 — 회색으로 표시 */
+.adm_ex_3d_field .adm_form_input:disabled {
+  background: #f1f5f9;
+  color: #475569;
+  cursor: not-allowed;
+}
+
+.adm_ex_3d_preview {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.5rem;
+  height: 4.4rem;
+  padding: 0 1.6rem;
+}
+
+.adm_ex_3d_preview .material-icons {
+  font-size: 1.9rem;
+}
+
+.adm_ex_3d_preview:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 단위(cm) 오입력 경고 */
+.adm_ex_3d_warn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.2rem;
+  font-size: 1.3rem;
+  color: #92400e;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 0.6rem;
+}
+
+.adm_ex_3d_warn .material-icons {
+  font-size: 1.7rem;
+  color: #d97706;
+}
+
+/* ── 3D: 섹션 타이틀 — 폼 라벨(1.4rem)과 달리 눈에 띄게 ── */
+.adm_ex_3d_title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0.6rem 0 0.2rem;
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #0f172a;
+}
+
+.adm_ex_3d_title .material-icons {
+  font-size: 2.6rem;
+  color: #2563eb;
+}
+
+.adm_ex_3d_title_sub {
+  flex: 1 1 100%;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+/* ── 3D: 도면에서 숫자 읽는 방법 안내 (항상 보임) ── */
+.adm_ex_3d_guide {
+  margin-top: 0.4rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.8rem;
+  background: #fbfcfd;
+  overflow: hidden;
+}
+
+.adm_ex_3d_guide_head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.1rem 1.4rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #374151;
+  background: #f3f6fa;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.adm_ex_3d_guide_head .material-icons {
+  font-size: 1.8rem;
+  color: #2563eb;
+}
+
+.adm_ex_3d_guide_body {
+  display: flex;
+  gap: 1.6rem;
+  align-items: flex-start;
+  padding: 1.4rem;
+}
+
+.adm_ex_3d_sample {
+  flex: 0 0 58%;
+  max-width: 58%;
+  height: auto;
+  display: block;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.6rem;
+  background: #fff;
+}
+
+.adm_ex_3d_guide_list {
+  flex: 1 1 auto;
+  margin: 0;
+  padding-left: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  font-size: 1.3rem;
+  line-height: 1.65;
+  color: #4b5563;
+}
+
+.adm_ex_3d_guide_list strong {
+  color: #111827;
+}
+
+/* ── 3D: 도면 위에서 외곽선 찍기 ── */
+.adm_ex_3d_outline {
+  margin-top: 0.4rem;
+  padding: 1.4rem;
+  border: 1px solid #dbe3ef;
+  border-radius: 0.8rem;
+  background: #f8fafc;
+}
+
+.adm_ex_3d_outline_head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.2rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid #dbe3ef;
+}
+
+.adm_ex_3d_outline_head .material-icons {
+  font-size: 2.4rem;
+  color: #2563eb;
+}
+
+.adm_ex_3d_outline_head strong {
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #0f172a;
+}
+
+.adm_ex_3d_outline_step {
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  background: #e8eefb;
+  color: #2563eb;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.adm_ex_3d_outline_notice {
+  margin: 1rem 0 0;
+  padding: 1rem 1.2rem;
+  border-radius: 0.6rem;
+  background: #fff;
+  border: 1px dashed #cbd5e1;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: #64748b;
+}
+
+.adm_plan {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.adm_plan_head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.25rem;
+  color: #64748b;
+}
+
+.adm_plan_count {
+  padding: 0.25rem 0.8rem;
+  border-radius: 999px;
+  background: #eef2f7;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.adm_plan_count.ok {
+  background: #e8eefb;
+  color: #2563eb;
+}
+
+.adm_plan_area {
+  font-weight: 700;
+  color: #111827;
+}
+
+.adm_plan_size {
+  font-weight: 700;
+  color: #2563eb;
+}
+
+/* 찍은 모양과 입력 치수의 비율이 어긋날 때 */
+.adm_plan_warn {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.9rem 1.2rem;
+  border: 1px solid #fde68a;
+  border-radius: 0.6rem;
+  background: #fffbeb;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: #92400e;
+}
+
+.adm_plan_warn .material-icons {
+  font-size: 1.7rem;
+  color: #d97706;
+  flex: none;
+}
+
+.adm_plan_sample {
+  padding: 0.25rem 0.8rem;
+  border-radius: 999px;
+  background: #fef3c7;
+  color: #92400e;
+  font-weight: 700;
+}
+
+/* 찍기 모드 전환 (외곽선 / 입구) */
+.adm_plan_modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.adm_plan_mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid #dbe3ef;
+  border-radius: 999px;
+  background: #fff;
+  color: #4b5563;
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.adm_plan_mode .material-icons {
+  font-size: 1.7rem;
+}
+
+.adm_plan_mode:hover:not(:disabled) {
+  border-color: #93b4f5;
+  color: #2563eb;
+}
+
+.adm_plan_mode.on {
+  border-color: #2563eb;
+  background: #e8eefb;
+  color: #1d4ed8;
+}
+
+/* 이미 지정된 항목(입구·데스크)이 있는 버튼 — 테두리와 체크로 표시 */
+.adm_plan_mode.set {
+  border-color: #86efac;
+  background: #f0fdf4;
+}
+
+.adm_plan_mode .adm_plan_mode_set {
+  font-size: 1.6rem;
+  color: #16a34a;
+}
+
+.adm_plan_mode:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.adm_plan_door_badge {
+  padding: 0.25rem 0.8rem;
+  border-radius: 999px;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-weight: 700;
+}
+
+.adm_plan_desk_badge {
+  padding: 0.25rem 0.8rem;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-weight: 700;
+}
+
+.adm_plan_desk {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  padding: 0.2rem 0.7rem;
+  border: 2px solid #0369a1;
+  border-radius: 0.4rem;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 1.2rem;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.adm_plan_stage_door {
+  cursor: cell;
+}
+
+.adm_plan_door_label {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  background: #dc2626;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.adm_plan_door_pending {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  background: #111827;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.adm_plan_help_door {
+  top: 1.4rem;
+  transform: translateX(-50%);
+  background: rgba(220, 38, 38, 0.9);
+}
+
+/* 도면 영역 — 이미지 크기에 딱 맞춰지고(점 좌표 계산 기준), 높이는 700px 로 제한 */
+.adm_plan_stage {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  line-height: 0;
+  border: 1px solid #dbe3ef;
+  border-radius: 0.6rem;
+  background: #fff;
+  cursor: crosshair;
+  touch-action: none;
+  user-select: none;
+}
+
+.adm_plan_img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 700px;
+  border-radius: 0.6rem;
+}
+
+.adm_plan_svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.adm_plan_dot {
+  position: absolute;
+  width: 2.2rem;
+  height: 2.2rem;
+  margin: -1.1rem 0 0 -1.1rem;
+  border-radius: 50%;
+  background: #2563eb;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 2.2rem;
+  text-align: center;
+  box-shadow: 0 0 0 2px #fff;
+  cursor: grab;
+}
+
+.adm_plan_dot.dragging {
+  cursor: grabbing;
+  background: #1d4ed8;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(37, 99, 235, 0.35);
+}
+
+.adm_plan_help {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  padding: 1rem 1.6rem;
+  border-radius: 0.6rem;
+  background: rgba(17, 24, 39, 0.82);
+  color: #fff;
+  font-size: 1.3rem;
+  line-height: 1.5;
+  pointer-events: none;
+}
+
+.adm_plan_tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.adm_plan_btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.25rem;
+  padding: 0.6rem 1.1rem;
+}
+
+.adm_plan_btn .material-icons {
+  font-size: 1.7rem;
+}
+
+@media (max-width: 768px) {
+  .adm_ex_3d_guide_body {
+    flex-direction: column;
+  }
+
+  .adm_ex_3d_sample {
+    flex: 0 0 auto;
+    max-width: 100%;
+  }
+}
+
+/* ==========================================
+   문의관리 (작가 1:1 문의 / 갤러리 답변)
+   ========================================== */
+.adm_iq_sum {
+  margin-left: 1.2rem;
+  font-style: normal;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #94a3b8;
+}
+.adm_iq_badge {
+  display: inline-flex;
+  align-items: center;
+  height: 2.6rem;
+  padding: 0 1.1rem;
+  border-radius: 99rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.adm_iq_badge.is-waiting {
+  background: #eef2f9;
+  color: #475569;
+}
+.adm_iq_badge.is-answered {
+  background: #e6f0ff;
+  color: #1d4ed8;
+}
+/* 목록 제목 (클릭 → 상세) */
+.adm_iq_title {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1f2937;
+  text-align: left;
+  cursor: pointer;
+}
+.adm_iq_title:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* ── 상세 ── */
+.adm_iqd_top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+.adm_iqd_back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.35rem;
+  color: #475569;
+  text-decoration: none;
+}
+.adm_iqd_back .material-icons {
+  font-size: 1.9rem;
+}
+.adm_iqd_back:hover {
+  color: #2563eb;
+}
+.adm_iqd_card {
+  border: 1px solid #e5e7eb;
+  border-radius: 1.4rem;
+  background: #fff;
+  overflow: hidden;
+}
+.adm_iqd_head {
+  padding: 2.2rem 2.4rem;
+  border-bottom: 1px solid #eef2f7;
+}
+.adm_iqd_title {
+  margin: 0 0 1.4rem;
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1.4;
+}
+.adm_iqd_meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 3.2rem;
+  margin: 0;
+}
+.adm_iqd_meta > div {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+}
+.adm_iqd_meta dt {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #6b7280;
+}
+.adm_iqd_meta dd {
+  margin: 0;
+  font-size: 1.35rem;
+  color: #374151;
+}
+.adm_iqd_email {
+  margin-left: 0.8rem;
+  font-style: normal;
+  font-size: 1.25rem;
+  color: #94a3b8;
+}
+.adm_iqd_body {
+  padding: 2.4rem;
+  font-size: 1.45rem;
+  line-height: 1.85;
+  color: #1f2937;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+/* 답변 작성 */
+.adm_iqd_answer {
+  margin-top: 2.8rem;
+  padding: 2.4rem;
+  border: 1px solid #dbe4f5;
+  border-radius: 1.4rem;
+  background: #fbfcff;
+}
+.adm_iqd_answer_head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.6rem;
+}
+.adm_iqd_answer_head .material-icons {
+  font-size: 2.2rem;
+  color: #2563eb;
+}
+.adm_iqd_answer_head strong {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #111827;
+}
+.adm_iqd_answer_head em {
+  font-style: normal;
+  font-size: 1.25rem;
+  color: #94a3b8;
+}
+.adm_iqd_textarea {
+  width: 100%;
+  padding: 1.6rem;
+  border: 1px solid #dfe6f2;
+  border-radius: 1.2rem;
+  background: #fff;
+  font-family: inherit;
+  font-size: 1.4rem;
+  line-height: 1.8;
+  color: #1f2937;
+  resize: vertical;
+}
+.adm_iqd_textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 0.3rem rgba(37, 99, 235, 0.12);
+}
+.adm_iqd_actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  margin-top: 1.8rem;
+}
+.adm_iqd_actions_right {
+  display: flex;
+  gap: 1rem;
+}
+/* 하단 버튼(문의 삭제 / 답변 저장) 크기·모양 통일
+   — 기본 버튼 클래스는 화면마다 높이가 달라(3rem/4.4rem) 이 영역에서만 맞춘다 */
+.adm_iqd_actions .adm_btn_delete,
+.adm_iqd_actions .adm_btn_primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 4.4rem;
+  min-width: 11rem;
+  padding: 0 2.2rem;
+  border-radius: 0.6rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  align-self: center;
+}
+
+

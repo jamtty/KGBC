@@ -1,0 +1,1027 @@
+@charset "UTF-8";
+
+/* ==========================================================================
+   KGBC 디자인 스타일 (전역 디자인 CSS)
+   - assets/css/common.css : 리셋 · 폰트 · 공통 요소
+   - assets/css/style.css  : 프로젝트 전체 디자인(이 파일)
+   rem 기준 1rem = 10px
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   01. 디자인 토큰 · 전역 유틸리티   (src/index.css)
+   -------------------------------------------------------------------------- */
+:root {
+  --color-ink: #14181f;
+  --color-ink-2: #4a5058;
+  --color-muted: #8b9199;
+  --color-line: #e3e6ea;
+  --color-bg: #ffffff;
+  --color-bg-soft: #f4f6f8;
+  --color-brand: #0f6b45;
+  --color-brand-dark: #0b5435;
+  /* 헤더 높이 (winteckorea.kr 헤더와 동일: 110px) */
+  --header-h: 110px;
+  /* 본문 컨테이너 좌우 여백 (1rem = 10px 기준) — 12rem = 120px */
+  --pad-main: 12rem;
+
+  color-scheme: light;
+  font-family: 'Pretendard', 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', system-ui, sans-serif;
+  line-height: 1.65;
+  color: var(--color-ink);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  /* 루트가 10px 기준이라 본문 기본 글자 크기는 16px로 따로 지정합니다. */
+  font-size: 1.6rem;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.3;
+}
+
+.container {
+  width: 100%;
+  padding-inline: var(--pad-main);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 156px;
+  padding: 14px 30px;
+  border: 1px solid transparent;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.btn--primary {
+  background: var(--color-brand);
+  border-color: var(--color-brand);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background: var(--color-brand-dark);
+  border-color: var(--color-brand-dark);
+}
+
+.btn--ghost {
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #fff;
+}
+
+.btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.btn--outline {
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+}
+
+.btn--outline:hover {
+  background: var(--color-ink);
+  color: #fff;
+}
+
+.sec-title {
+  margin-bottom: 48px;
+  text-align: center;
+}
+
+.sec-title--left {
+  text-align: left;
+}
+
+.sec-title__eyebrow {
+  margin: 0 0 10px;
+  color: var(--color-brand);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+}
+
+.sec-title__title {
+  margin: 0;
+  font-size: clamp(26px, 3vw, 38px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.sec-title__desc {
+  margin: 16px 0 0;
+  color: var(--color-ink-2);
+  font-size: 16px;
+}
+
+@media (max-width: 1600px) {
+  :root {
+    --pad-main: 9rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  :root {
+    --pad-main: 6rem;
+  }
+}
+
+@media (max-width: 900px) {
+  :root {
+    --header-h: 72px;
+    --pad-main: 3rem;
+  }
+}
+
+@media (max-width: 600px) {
+  :root {
+    --pad-main: 2rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   02. 앱 레이아웃   (src/layouts/RootLayout.css)
+   -------------------------------------------------------------------------- */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app__main {
+  flex: 1;
+}
+
+/* The main page scrolls inside FullPage, so the shell itself never scrolls. */
+.app--home {
+  height: 100svh;
+  overflow: hidden;
+}
+
+.app:not(.app--home) .app__main {
+  padding-top: var(--header-h);
+}
+
+/* --------------------------------------------------------------------------
+   03. 헤더 (GNB · 모바일 드로어)   (winteckorea.kr 헤더 CSS 기준)
+   -------------------------------------------------------------------------- */
+.hd {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 90;
+  width: 100%;
+  height: var(--header-h);
+  letter-spacing: -0.03em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.6s;
+}
+
+/* 헤더 hover 또는 스크롤/서브페이지 상태 → 흰 배경 (원본: #header:hover, #header.scrolled) */
+.hd:hover,
+.hd.is-solid {
+  background: #fff;
+}
+
+.hd__inner {
+  position: relative;
+  height: inherit;
+  max-width: 1750px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.hd__logo {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  z-index: 10;
+  margin: 0;
+  transform: translateY(-50%);
+}
+
+.hd__logo a {
+  display: block;
+  line-height: 1.1;
+}
+
+.hd__logo-mark {
+  display: block;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  transition: all 0.6s;
+}
+
+.hd__logo-sub {
+  display: block;
+  margin-top: 4px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  opacity: 0.7;
+  transition: all 0.6s;
+}
+
+.hd:hover .hd__logo-mark,
+.hd.is-solid .hd__logo-mark,
+.hd:hover .hd__logo-sub,
+.hd.is-solid .hd__logo-sub {
+  color: #000;
+}
+
+/* GNB */
+.hd__nav {
+  position: relative;
+  margin-left: 60px;
+}
+
+.hd__list {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hd__item {
+  position: relative;
+  height: var(--header-h);
+  padding: 0 45px;
+  text-align: center;
+}
+
+.hd__link {
+  position: relative;
+  display: inline-block;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: var(--header-h);
+  white-space: nowrap;
+  transition: all 0.6s;
+}
+
+.hd__item:hover > .hd__link {
+  color: #ff1010;
+}
+
+.hd:hover .hd__link,
+.hd.is-solid .hd__link {
+  color: #000;
+}
+
+.hd:hover .hd__item:hover > .hd__link,
+.hd.is-solid .hd__item:hover > .hd__link {
+  color: #001f5d;
+}
+
+/* 서브메뉴 (원본: #gnb .submenu) */
+.hd__sub {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  z-index: 20;
+  width: 260px;
+  transform: translateX(-50%);
+}
+
+.hd__item:hover > .hd__sub,
+.hd__item:focus-within > .hd__sub {
+  display: block;
+}
+
+.hd__sublist {
+  margin: 0;
+  padding: 40px 0 60px;
+  background: #f8f8f8;
+  list-style: none;
+}
+
+.hd__sublist > li {
+  padding: 0;
+  text-align: center;
+}
+
+.hd__sublink {
+  position: relative;
+  display: inline-block;
+  padding: 7px 0;
+  color: #666;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.3em;
+  white-space: nowrap;
+  transition: all 0.4s;
+}
+
+.hd__sublink:hover {
+  color: #000;
+}
+
+.hd__sublink::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: #737373;
+  transform: translateX(-50%);
+  transition: all 0.4s;
+}
+
+.hd__sublink:hover::after {
+  width: 100%;
+}
+
+/* 서브메뉴 열림 시 본문 딤 처리 (원본: .submenu-bg) */
+.hd__dim {
+  position: fixed;
+  top: var(--header-h);
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.6s;
+  /* 장식용 레이어 — 스크롤/클릭 입력을 가로막지 않도록 합니다. */
+  pointer-events: none;
+}
+
+.hd:has(.hd__item:hover) .hd__dim,
+.hd:has(.hd__item:focus-within) .hd__dim {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 전체메뉴 버튼 (원본: .sitemap-btn) — 모바일 드로어 열기 */
+.hd__toggle {
+  display: none;
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  width: 25px;
+  height: 16px;
+  margin-top: -8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.hd__bars,
+.hd__bars::before,
+.hd__bars::after {
+  position: absolute;
+  height: 2px;
+  background: #fff;
+  transition: all 0.6s;
+}
+
+.hd__bars {
+  top: 50%;
+  right: 0;
+  width: 25px;
+  margin-top: -1px;
+}
+
+.hd__bars::before,
+.hd__bars::after {
+  content: '';
+  left: 50%;
+  width: 13px;
+  transform: translateX(-50%);
+}
+
+.hd__bars::before {
+  top: -7px;
+}
+
+.hd__bars::after {
+  bottom: -7px;
+}
+
+.hd__toggle:hover .hd__bars::before,
+.hd__toggle:hover .hd__bars::after {
+  width: 25px;
+}
+
+.hd:hover .hd__bars,
+.hd.is-solid .hd__bars,
+.hd:hover .hd__bars::before,
+.hd.is-solid .hd__bars::before,
+.hd:hover .hd__bars::after,
+.hd.is-solid .hd__bars::after {
+  background: #000;
+}
+
+.hd__toggle.is-open .hd__bars {
+  background: transparent;
+}
+
+.hd__toggle.is-open .hd__bars::before {
+  top: 0;
+  width: 25px;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.hd__toggle.is-open .hd__bars::after {
+  bottom: 0;
+  width: 25px;
+  transform: translateX(-50%) rotate(-45deg);
+}
+
+/* 모바일 드로어 */
+.hd__drawer {
+  position: fixed;
+  top: var(--header-h);
+  right: 0;
+  left: 0;
+  max-height: calc(100vh - var(--header-h));
+  overflow-y: auto;
+  background: #fff;
+  border-top: 1px solid var(--color-line);
+  box-shadow: 0 24px 40px rgba(16, 20, 24, 0.14);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-12px);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    visibility 0.25s;
+}
+
+.hd__drawer.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.hd__drawer-nav {
+  padding: 12px 15px 32px;
+}
+
+.hd__drawer-group {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.hd__drawer-group:last-child {
+  border-bottom: 0;
+}
+
+.hd__drawer-title {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--color-ink);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.hd__drawer-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hd__drawer-list a {
+  display: block;
+  padding: 7px 0;
+  color: var(--color-ink-2);
+  font-size: 15px;
+}
+
+@media (max-width: 1100px) {
+  .hd__nav {
+    display: none;
+  }
+
+  .hd__toggle {
+    display: block;
+  }
+}
+
+@media (max-width: 600px) {
+  .hd__logo-mark {
+    font-size: 22px;
+  }
+
+  .hd__logo-sub {
+    font-size: 10px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   04. 푸터   (src/components/Footer.css)
+   -------------------------------------------------------------------------- */
+.ft {
+  padding: 56px 0 40px;
+  color: var(--color-ink-2);
+  background: var(--color-bg-soft);
+  border-top: 1px solid var(--color-line);
+}
+
+.ft__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.ft__logo {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.ft__desc {
+  margin: 8px 0 0;
+  color: var(--color-muted);
+  font-size: 14px;
+}
+
+.ft__nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ft__nav a {
+  font-size: 15px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.ft__nav a:hover {
+  color: var(--color-brand);
+}
+
+.ft__copy {
+  margin: 36px 0 0;
+  padding-top: 22px;
+  border-top: 1px solid var(--color-line);
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+/* --------------------------------------------------------------------------
+   05. 메인 풀페이지 (GSAP 스냅 · 리빌)   (src/components/FullPage.css)
+   -------------------------------------------------------------------------- */
+.fp {
+  position: relative;
+  height: 100svh;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  background: var(--color-bg);
+  /* The section content fills the viewport, so the scrollbar is hidden. */
+  scrollbar-width: none;
+}
+
+.fp::-webkit-scrollbar {
+  display: none;
+}
+
+.fp__section {
+  display: flex;
+  align-items: center;
+  min-height: 100svh;
+  /* Clips the GSAP content drift so it never adds scrollable overflow. */
+  overflow: hidden;
+}
+
+.fp__inner {
+  width: 100%;
+  will-change: transform;
+}
+
+.fp__scroll {
+  position: fixed;
+  bottom: 34px;
+  left: 50%;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: 1px solid rgba(140, 148, 158, 0.45);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transform: translateX(-50%);
+  transition:
+    border-color 0.3s,
+    background 0.3s;
+}
+
+.fp__scroll:hover {
+  border-color: var(--color-brand);
+  background: rgba(15, 107, 69, 0.12);
+}
+
+.fp__scroll-arrow {
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  color: var(--color-ink-2);
+  transform: translateY(-2px) rotate(45deg);
+  animation: fp-bounce 1.8s infinite;
+}
+
+@keyframes fp-bounce {
+  0%,
+  100% {
+    transform: translateY(-2px) rotate(45deg);
+  }
+  50% {
+    transform: translateY(4px) rotate(45deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fp__inner {
+    will-change: auto;
+  }
+
+  .fp__scroll-arrow {
+    animation: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .fp__scroll {
+    bottom: 20px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   06. 메인 페이지   (src/pages/Home.css)
+   -------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 100svh;
+  color: #fff;
+  background:
+    radial-gradient(120% 90% at 78% 18%, rgba(15, 107, 69, 0.5), transparent 62%),
+    linear-gradient(160deg, #101820 0%, #17222c 46%, #0c1116 100%);
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10, 14, 18, 0.55), rgba(10, 14, 18, 0.2) 45%, rgba(10, 14, 18, 0.7));
+}
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+  /* 좌우 여백은 .container의 --pad-main을 그대로 사용합니다. */
+  padding-block: calc(var(--header-h) + 40px) 96px;
+}
+
+.hero__eyebrow {
+  margin: 0 0 18px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.42em;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.hero__title {
+  margin: 0;
+  font-size: clamp(34px, 5vw, 62px);
+  font-weight: 700;
+  line-height: 1.24;
+  letter-spacing: -0.02em;
+}
+
+.hero__desc {
+  max-width: 620px;
+  margin: 26px 0 0;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: clamp(15px, 1.2vw, 18px);
+  line-height: 1.8;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 40px;
+}
+
+.home-sec {
+  display: flex;
+  align-items: center;
+  min-height: 100svh;
+  padding: 140px 0;
+}
+
+.home-sec--soft {
+  background: var(--color-bg-soft);
+}
+
+.card-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card__link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 40px 32px;
+  background: #fff;
+  border: 1px solid var(--color-line);
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.card__link:hover {
+  border-color: var(--color-brand);
+  box-shadow: 0 22px 44px rgba(16, 20, 24, 0.1);
+  transform: translateY(-6px);
+}
+
+.card__title {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.card__desc {
+  flex: 1;
+  margin: 14px 0 32px;
+  color: var(--color-ink-2);
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.card__more {
+  color: var(--color-brand);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.link-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link-list__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 26px 30px;
+  background: #fff;
+  border: 1px solid var(--color-line);
+  transition:
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.link-list__item:hover {
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+}
+
+.link-list__title {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.link-list__arrow {
+  width: 9px;
+  height: 9px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.home-sec--contact {
+  background: var(--color-bg-soft);
+  /* 마지막 섹션이라 화면 높이(100svh)를 강제로 채우지 않고 내용 높이만 차지합니다.
+     (푸터 위에 빈 화면이 남지 않도록) */
+  min-height: auto;
+}
+
+/* 위 섹션을 감싼 풀페이지 섹션도 한 화면이 아니라 내용 높이만 차지하게 합니다. */
+.fp__section:has(> .fp__inner > .home-sec--contact) {
+  min-height: auto;
+}
+
+.contact__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 40px;
+}
+
+/* 메인의 공통 푸터(.ft)는 별도 화면이 아니라 마지막 섹션 바로 아래에 붙습니다.
+   (100svh 화면 채우기와 세로 중앙 정렬을 풀어 푸터 높이만 차지하게 합니다.) */
+.fp__section:has(> .fp__inner > .ft) {
+  display: block;
+  min-height: auto;
+}
+
+@media (max-width: 900px) {
+  .card-list {
+    grid-template-columns: 1fr;
+  }
+
+  .link-list {
+    grid-template-columns: 1fr;
+  }
+
+  .home-sec {
+    /* Section height is owned by .fp__section; keep the padding compact. */
+    min-height: auto;
+    padding: 84px 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   07. 서브 페이지   (src/pages/SubPage.css)
+   -------------------------------------------------------------------------- */
+.sub {
+  padding-bottom: 120px;
+}
+
+.sub__banner {
+  display: flex;
+  align-items: flex-end;
+  min-height: 300px;
+  padding: 72px 0 48px;
+  color: #fff;
+  background:
+    radial-gradient(110% 120% at 82% 0%, rgba(15, 107, 69, 0.55), transparent 60%),
+    linear-gradient(150deg, #101820 0%, #17222c 55%, #0c1116 100%);
+}
+
+.sub__group {
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.sub__title {
+  margin: 0;
+  font-size: clamp(28px, 3.4vw, 44px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.sub__crumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--color-line);
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+.sub__crumb a:hover {
+  color: var(--color-brand);
+}
+
+.sub__crumb-sep {
+  color: var(--color-line);
+}
+
+.sub__crumb-current {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.sub__body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 420px;
+  padding: 60px 0;
+}
+
+.sub__empty {
+  padding: 60px 48px;
+  color: var(--color-muted);
+  font-size: 16px;
+  text-align: center;
+  background: var(--color-bg-soft);
+  border: 1px dashed var(--color-line);
+}
+
+@media (max-width: 600px) {
+  .sub__banner {
+    min-height: 220px;
+    padding: 48px 0 32px;
+  }
+
+  .sub__empty {
+    padding: 44px 24px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   08. 404 페이지   (src/pages/NotFound.css)
+   -------------------------------------------------------------------------- */
+.nf {
+  display: flex;
+  align-items: center;
+  min-height: calc(100vh - var(--header-h));
+}
+
+.nf__inner {
+  /* 좌우 여백은 .container의 --pad-main을 그대로 사용합니다. */
+  padding-block: 80px;
+  text-align: center;
+}
+
+.nf__code {
+  margin: 0;
+  color: var(--color-brand);
+  font-size: 64px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.nf__title {
+  margin: 12px 0 0;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.nf__desc {
+  margin: 14px 0 36px;
+  color: var(--color-muted);
+}
