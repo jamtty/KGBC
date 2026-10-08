@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none" aria-hidden="true">
+  <!-- 실험·연구 기구 -->
+  <g stroke="#14181f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 8h8" />
+    <path d="M22 8v12.5L13 38a3 3 0 0 0 2.7 4.4h16.6A3 3 0 0 0 35 38l-9-17.5V8" />
+    <path d="M17.5 31h13" stroke="#9e0810" />
+  </g>
+</svg>

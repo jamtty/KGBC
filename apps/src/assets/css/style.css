@@ -26,6 +26,8 @@
   --header-h: 11rem;
   /* 본문 컨테이너 좌우 여백 (1rem = 10px 기준) — 12rem = 120px */
   --pad-main: 12rem;
+  /* 본문 콘텐츠(문단·설명·목록) 공통 글자 크기 */
+  --fs-body: 1.7rem;
 
   color-scheme: light;
   font-family: 'Pretendard', 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', system-ui, sans-serif;
@@ -36,41 +38,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  /* 루트가 10px 기준이라 본문 기본 글자 크기는 16px로 따로 지정합니다. */
-  font-size: 1.6rem;
-  overflow-x: hidden;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-button {
-  font: inherit;
-  color: inherit;
-}
-
-img,
-svg {
-  display: block;
-  max-width: 100%;
-}
-
-h1,
-h2,
-h3,
-h4 {
-  line-height: 1.3;
-}
+/* 전역 요소 기본값(리셋 · body · a · img/svg · 제목)은 common.css 에서 관리합니다. */
 
 .container {
   width: 100%;
@@ -129,10 +97,6 @@ h4 {
   text-align: center;
 }
 
-.sec-title--left {
-  text-align: left;
-}
-
 .sec-title__eyebrow {
   margin: 0 0 1rem;
   color: var(--color-brand);
@@ -151,7 +115,7 @@ h4 {
 .sec-title__desc {
   margin: 1.6rem 0 0;
   color: var(--color-ink-2);
-  font-size: 1.6rem;
+  font-size: 1.8rem;
 }
 
 @media (max-width: 1600px) {
@@ -195,6 +159,11 @@ h4 {
 /* The main page scrolls inside FullPage, so the shell itself never scrolls. */
 .app--home {
   height: 100svh;
+  /* ⚠️ .app 의 min-height:100vh 를 그대로 두면, iOS Safari(vh = 툴바가 접힌 “큰” 뷰포트,
+     svh = 툴바가 펼쳐진 “작은” 뷰포트)에서는 min-height 가 이겨서 이 컨테이너가
+     100vh(>100svh)가 됩니다 → 화면에는 안 보이는 높이만큼 **문서가 스크롤**되고,
+     .fp 스크롤과 섞여 헤더 숨김/표시 판정이 어긋납니다. 그래서 여기서는 min-height 를 끕니다. */
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -203,6 +172,13 @@ h4 {
 .app:not(.app--home) .app__main {
   padding-top: var(--header-h);
   background: var(--color-bg-soft);
+}
+
+/* 서브페이지(.sub)는 서브비주얼이 화면 맨 위까지 이어지도록 위쪽 여백을 없앱니다.
+   → 배너 상단이 고정 헤더 뒤로 들어가고, 헤더는 상단에서 투명(Header.tsx)입니다.
+   404 등 다른 비메인 페이지는 기존 여백을 그대로 유지합니다. */
+.app:not(.app--home) .app__main:has(.sub) {
+  padding-top: 0;
 }
 
 /* --------------------------------------------------------------------------
@@ -255,7 +231,6 @@ h4 {
 }
 
 .hd__logo-img {
-  display: block;
   width: auto;
   height: 3rem;
   /* 메인 상단(투명 헤더)에서만 흰색으로 반전합니다.
@@ -315,20 +290,51 @@ h4 {
   color: var(--color-brand);
 }
 
-/* 현재 페이지가 속한 그룹(GNB) 활성 표시 — 시그니처 컬러 */
+/* 현재 페이지가 속한 그룹(GNB) 활성 표시 — LNB(.lnb li.is-active a)와 동일한 효과:
+   시그니처 컬러 + 볼드 + 하단 라인
+   (기본 500 Medium → 활성 700 Bold. 600 SemiBold 는 500 과 차이가 잘 드러나지 않아 한 단계 더 올렸습니다.) */
 .hd__item.is-active > .hd__link {
   color: var(--color-brand);
+  font-weight: 700;
 }
 
-/* 서브메뉴 (원본: #gnb .submenu) */
+/* 활성 항목 하단 라인 — LNB 의 ::before 와 같은 0.3rem 레드 라인 */
+.hd__link::after {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  content: '';
+  width: 0;
+  height: 0.3rem;
+  background: var(--color-brand);
+  transform: translateX(-50%);
+  transition: width 0.4s ease;
+}
+
+.hd__item.is-active > .hd__link::after {
+  width: 100%;
+}
+
+/* 서브메뉴 (원본: #gnb .submenu)
+   display 를 껐다 켜지 않고 높이(0 → 펼침)를 전환해
+   위에서 아래로 펼쳐지는 슬라이드 토글로 동작시킵니다. */
 .hd__sub {
-  display: none;
   position: absolute;
   top: 100%;
   left: 50%;
   z-index: 20;
   width: 26rem;
   transform: translateX(-50%);
+  /* 닫힘 상태 — overflow 로 패널을 완전히 가리고,
+     visibility 로 닫힌 동안 탭 순서·낭독기에서도 제외합니다. */
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.3s ease,
+    visibility 0.4s;
 }
 
 /* 서브메뉴는 JS가 붙이는 .is-open 클래스로 열립니다(경로 이동 시 초기화).
@@ -336,7 +342,9 @@ h4 {
    포커스는 Header 쪽에서 blur() 로 해제해 서브메뉴가 붙잡히지 않게 합니다. */
 .hd__item.is-open > .hd__sub,
 .hd__item:focus-within > .hd__sub {
-  display: block;
+  max-height: 40rem;
+  opacity: 1;
+  visibility: visible;
 }
 
 .hd__sublist {
@@ -344,6 +352,14 @@ h4 {
   padding: 4rem 0 6rem;
   background: #f8f8f8;
   list-style: none;
+  /* 펼칠 때 내용이 살짝 따라 내려오는 효과 */
+  transform: translateY(-1.2rem);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hd__item.is-open .hd__sublist,
+.hd__item:focus-within .hd__sublist {
+  transform: none;
 }
 
 .hd__sublist > li {
@@ -603,7 +619,6 @@ h4 {
 
 /* 푸터는 다크 배경이라 로고를 흰색으로 반전해 씁니다. */
 .ft__logo-img {
-  display: block;
   width: auto;
   height: 2.2rem;
   filter: brightness(0) invert(1);
@@ -684,7 +699,8 @@ h4 {
 .hero {
   position: relative;
   display: flex;
-  align-items: center;
+  /* 문구 묶음(.hero__content)을 화면 하단에 붙입니다. */
+  align-items: flex-end;
   min-height: 100svh;
   color: #fff;
   background:
@@ -711,16 +727,53 @@ h4 {
   background: linear-gradient(180deg, rgba(10, 14, 18, 0.5), rgba(10, 14, 18, 0.22) 45%, rgba(10, 14, 18, 0.66));
 }
 
+/* 동영상 배경 위에 얹는 촘촘한 흰색 체크 격자 (장식).
+   --hero-grid-line 으로 색·투명도, --hero-grid-size 로 간격을 조절합니다.
+   z-index 1 로 딤(.hero::after) 위에 올라가고, 본문(.hero__content)보다 아래입니다. */
+.hero__grid {
+  --hero-grid-line: rgba(255, 255, 255, 0.03);
+  --hero-grid-size: 1rem;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, var(--hero-grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--hero-grid-line) 1px, transparent 1px);
+  background-size: var(--hero-grid-size) var(--hero-grid-size);
+}
+
+/* 하단에 놓이는 문구 묶음. 좌우 여백은 .container의 --pad-main을 그대로 사용합니다. */
 .hero__content {
   position: relative;
   z-index: 1;
-  /* 좌우 여백은 .container의 --pad-main을 그대로 사용합니다. */
-  padding-block: calc(var(--header-h) + 4rem) 9.6rem;
+  /* 위쪽 여백(고정 헤더 회피용)은 필요 없고, 바닥에서 띄우는 값만 남깁니다. */
+  padding-block: 0 8.4rem;
+}
+
+/* 로드 3초 뒤 서서히 나타나는 페이드. */
+@keyframes hero-content-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* 애니메이션을 쓸 수 있고 모션 최소화를 원하지 않는 사용자에게만 적용합니다.
+   (그 외에는 opacity 기본값 1 로 즉시 보입니다) */
+@media (prefers-reduced-motion: no-preference) {
+  .hero__content {
+    opacity: 0;
+    animation: hero-content-in 1.2s ease-out 3s forwards;
+  }
 }
 
 .hero__eyebrow {
-  margin: 0 0 1.8rem;
-  font-size: 1.4rem;
+  margin: 0 0 1.4rem;
+  font-size: 1.3rem;
   font-weight: 700;
   /* 한글 정식 명칭이라 자간을 좁게 잡습니다. (라틴 전용일 때는 0.42em) */
   letter-spacing: 0.2em;
@@ -729,25 +782,57 @@ h4 {
 
 .hero__title {
   margin: 0;
-  font-size: clamp(3.4rem, 5vw, 6.2rem);
+  font-size: clamp(2.6rem, 3.4vw, 4.4rem);
   font-weight: 700;
   line-height: 1.24;
   letter-spacing: -0.02em;
 }
 
 .hero__desc {
-  max-width: 62rem;
-  margin: 2.6rem 0 0;
+  max-width: 54rem;
+  margin: 2rem 0 0;
   color: rgba(255, 255, 255, 0.76);
-  font-size: clamp(1.5rem, 1.2vw, 1.8rem);
+  font-size: clamp(1.4rem, 1vw, 1.6rem);
   line-height: 1.8;
 }
 
 .hero__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.4rem;
-  margin-top: 4rem;
+  gap: 1.2rem;
+  margin-top: 3rem;
+}
+
+/* 하단 문구와 균형을 맞춰 버튼도 한 단계 작게 */
+.hero__actions .btn {
+  min-width: 13.6rem;
+  padding: 1.15rem 2.4rem;
+  font-size: 1.4rem;
+}
+
+/* 모바일(≤900px) 메인 히어로 — 배경 영상 위에는 버튼 두 개만 남기고
+   문구(아이브로우·제목·설명)는 화면에서 감춥니다.
+   DOM 에서 지우지 않고 display:none 으로만 감추므로 스크린리더에는 소개 문구가 그대로 남습니다.
+   (문구를 되살리려면 이 블록만 지우면 됩니다.) */
+@media (max-width: 900px) {
+  .hero__eyebrow,
+  .hero__title,
+  .hero__desc {
+    display: none;
+  }
+
+  /* 문구가 사라져 위쪽 여백이 필요 없어졌습니다. */
+  .hero__actions {
+    margin-top: 0;
+  }
+
+  /* 문구가 빠진 만큼 버튼을 화면 아래로 내립니다(기본 8.4rem → 4rem).
+     더 내리려면 4rem 값을 줄이세요. */
+  .hero__content {
+    padding-block: 0 4rem;
+    /* 아이폰 홈 인디케이터 영역을 침범하지 않도록 아래 여백만 안전영역을 보장합니다. */
+    padding-bottom: max(4rem, env(safe-area-inset-bottom));
+  }
 }
 
 .home-sec {
@@ -761,93 +846,194 @@ h4 {
   background: var(--color-bg-soft);
 }
 
-.card-list {
+/* KGBC 사업 · 설국농장 — 사진 위에 제목을 얹는 이미지 카드 (winteckorea.kr 카드형 비주얼 목록 참고).
+   사진은 모두 KGBC 실제 촬영본입니다(원본: D:\카톡다운로드\KGBC사진).
+   KGBC 사업 3장 = src/images/{sire,data,store}.jpg · 설국농장 4장 = farm-{branding,jyg,embryo,huwoo}.jpg */
+
+/* 사진 카드가 있는 섹션만 세로 여백을 줄여 한 화면 안에 들어오도록 합니다. */
+@media (min-width: 901px) {
+  .home-sec.home-sec--cards,
+  .home-sec.home-sec--farm {
+    padding: 10rem 0;
+  }
+}
+
+/* 화면 높이가 낮은 노트북(768/720px)에서도 카드가 한 화면을 넘지 않도록 여백을 더 줄입니다.
+   섹션은 가운데 정렬이라 내용이 짧을 때는 이 값이 보이지 않고(오늘까지 동일),
+   높이가 부족할 때만 카드 공간을 내줍니다.
+   측정: 1366x768 에서 10rem 이면 KGBC 사업 섹션이 774px(=6px 초과)로 스냅이 풀렸습니다. */
+@media (min-width: 901px) and (max-height: 860px) {
+  .home-sec.home-sec--cards,
+  .home-sec.home-sec--farm {
+    padding: 6rem 0;
+  }
+
+  /* 홍보자료 섹션도 낮은 노트북(768/720px)에서 한 화면 안에 들어오게 위 여백만 줄입니다.
+     (아래 여백은 마지막 섹션 규칙 .home-sec--last 가 담당합니다.) */
+  .home-sec.home-sec--promo {
+    padding-top: 6rem;
+  }
+}
+
+.biz-cards {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 2.4rem;
+  gap: 2rem;
   margin: 0;
   padding: 0;
   list-style: none;
+  /* 카드 높이는 뷰포트 기준이되, **섹션이 100svh 를 넘지 않도록** 상한을 같이 걸어둡니다.
+     100svh - 34rem = 화면 높이에서 (상·하 여백 + 제목 영역)을 뺀 값입니다.
+     ⚠️ 섹션이 뷰포트보다 길어지면 FullPage 의 fitsViewport() 가 false 가 되어
+        **메인 전체의 휠 스냅이 풀립니다** (측정: 1920x900 에서 이 상한이 없으면 15px 초과).
+     ⚠️ 카드 높이를 aspect-ratio 로 잡지 마세요 — 뷰포트에서 이 상한을 보장할 수 없습니다. */
+  height: min(56rem, 52vh, calc(100svh - 34rem));
 }
 
-.card__link {
-  display: flex;
-  flex-direction: column;
+.biz-card {
+  min-height: 0;
+}
+
+.biz-card__link {
+  position: relative;
+  display: block;
   height: 100%;
-  padding: 4rem 3.2rem;
-  background: #fff;
-  border: 1px solid var(--color-line);
-  transition:
-    transform 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
+  overflow: hidden;
+  background: #101820;
+  color: #fff;
 }
 
-.card__link:hover {
-  border-color: var(--color-brand);
-  box-shadow: 0 2.2rem 4.4rem rgba(16, 20, 24, 0.1);
-  transform: translateY(-0.6rem);
+.biz-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1s cubic-bezier(0.22, 0.61, 0.24, 1);
 }
 
-.card__title {
+.biz-card__link:hover .biz-card__img,
+.biz-card__link:focus-visible .biz-card__img {
+  transform: scale(1.06);
+}
+
+/* 흰 제목이 어떤 사진 위에서도 읽히도록 위쪽을 어둡게, 아래쪽은 살짝 덮습니다. */
+.biz-card__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 11, 15, 0.74) 0%,
+    rgba(8, 11, 15, 0.38) 34%,
+    rgba(8, 11, 15, 0.08) 58%,
+    rgba(8, 11, 15, 0.46) 100%
+  );
+  transition: opacity 0.4s ease;
+}
+
+.biz-card__link:hover .biz-card__scrim,
+.biz-card__link:focus-visible .biz-card__scrim {
+  opacity: 0.88;
+}
+
+.biz-card__body {
+  position: absolute;
+  top: 4rem;
+  right: 3.4rem;
+  left: 3.4rem;
+}
+
+.biz-card__title {
   margin: 0;
-  font-size: 2.1rem;
+  font-size: clamp(2.2rem, 2.1vw, 3.2rem);
   font-weight: 700;
+  line-height: 1.34;
+  letter-spacing: -0.02em;
 }
 
-.card__desc {
-  flex: 1;
-  margin: 1.4rem 0 3.2rem;
-  color: var(--color-ink-2);
-  font-size: 1.5rem;
-  line-height: 1.75;
+.biz-card__desc {
+  max-width: 30rem;
+  margin: 1.6rem 0 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 1.45rem;
+  line-height: 1.7;
 }
 
-.card__more {
-  color: var(--color-brand);
+.biz-card__more {
+  position: absolute;
+  bottom: 3.8rem;
+  left: 3.4rem;
   font-size: 1.4rem;
   font-weight: 600;
   letter-spacing: 0.02em;
 }
 
-.link-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.6rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+/* hover 시 시그니처 레드 밑줄이 왼쪽에서 자라납니다. */
+.biz-card__more::after {
+  content: '';
+  position: absolute;
+  bottom: -0.8rem;
+  left: 0;
+  width: 2.4rem;
+  height: 0.2rem;
+  background: var(--color-brand);
+  transition: width 0.45s ease;
 }
 
-/* 링크가 하나뿐인 섹션은 목록을 한 열로 넓게 씁니다. */
-.link-list--single {
-  grid-template-columns: 1fr;
+.biz-card__link:hover .biz-card__more::after,
+.biz-card__link:focus-visible .biz-card__more::after {
+  width: 100%;
 }
 
-.link-list__item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.6rem;
-  padding: 2.6rem 3rem;
-  background: #fff;
-  border: 1px solid var(--color-line);
-  transition:
-    border-color 0.3s ease,
-    color 0.3s ease;
+/* 설국농장 — KGBC 사업과 **같은 카드 서식**을 4장 가로 한 줄로 씁니다(열 수만 3 → 4).
+   카드 높이는 .biz-cards 공통 규칙(min(56rem, 52vh, 100svh - 34rem))을 그대로 씁니다.
+   사진 원본: D:\카톡다운로드\KGBC사진 → src/assets/images/farm-{branding,jyg,embryo,huwoo}.jpg */
+.biz-cards--farm {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-.link-list__item:hover {
-  border-color: var(--color-brand);
-  color: var(--color-brand);
+/* 제목을 줄 단위로 쌓아 두 줄짜리 제목도 같은 리듬으로 보입니다. */
+.biz-cards--farm .biz-card__line {
+  display: block;
 }
 
-.link-list__title {
-  font-size: 1.7rem;
-  font-weight: 600;
+/* 카드가 4장이라 좁은 화면(≤1100px)에서는 한 장 폭이 20rem 아래로 내려갑니다.
+   설명 문구가 카드 밖으로 잘리지 않도록 여백·글자를 한 단계 줄입니다. */
+@media (max-width: 1100px) {
+  .biz-cards--farm .biz-card__body {
+    top: 2.6rem;
+    right: 2rem;
+    left: 2rem;
+  }
+
+  .biz-cards--farm .biz-card__more {
+    bottom: 2.4rem;
+    left: 2rem;
+  }
+
+  .biz-cards--farm .biz-card__title {
+    font-size: 1.9rem;
+  }
+
+  .biz-cards--farm .biz-card__desc {
+    margin-top: 1.2rem;
+    font-size: 1.3rem;
+  }
 }
 
-.link-list__arrow {
+/* 한 열로 내려가면(≤900px) 카드도 KGBC 사업과 같은 가로 비율(4:3)을 씁니다.
+   위 선택자가 공통 규칙(`.biz-card__link`)보다 우선순위가 높아 따로 지정해야 합니다. */
+@media (max-width: 900px) {
+  .biz-cards--farm .biz-card__link {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* ⚠️ 여기서 열 수를 줄이면(2단 등) 카드가 2행이 되어 섹션이 뷰포트보다 길어지고,
+   FullPage 의 fitsViewport() 가 false 가 되어 **메인 전체의 휠 스냅이 풀립니다.**
+   설국농장 카드는 화면 폭과 상관없이 항상 4단을 유지합니다.
+   좁은 화면(≤900px)의 1단 전환은 .biz-cards 공통 규칙이 처리합니다. */
+
+/* 목록 항목 끝에 붙는 '›' 화살표 — 한우영농조합 링크(.split__link)에서 씁니다. */
+.link-arrow {
   width: 0.9rem;
   height: 0.9rem;
   border-top: 0.2rem solid currentColor;
@@ -855,15 +1041,107 @@ h4 {
   transform: rotate(45deg);
 }
 
-/* 메인의 마지막 콘텐츠 섹션은 화면 높이(100svh)를 강제로 채우지 않고 내용 높이만 차지합니다.
-   푸터와 붙지 않도록 아래 여백을 남깁니다. */
-.home-sec.home-sec--last {
+/* 화면 높이(100svh)를 강제로 채우지 않고 내용 높이만 차지하는 콘텐츠 섹션.
+   (한우영농조합 · 홍보자료처럼 서로 이어지며 메인 마지막을 이루는 섹션에 씁니다.) */
+.home-sec.home-sec--content {
   min-height: auto;
+}
+
+/* 메인의 마지막 콘텐츠 섹션 — 푸터와 붙지 않도록 아래 여백을 남깁니다. */
+.home-sec.home-sec--last {
   padding-bottom: 12rem;
 }
 
+/* 한우영농조합 — 좌측 사진 + 우측 텍스트.
+   사진은 `src/assets/images/union-hanwoo.jpg` — 한옥 담장 앞에 선 한국 한우 (CC0 · Wikimedia Commons). */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 7rem;
+}
+
+.split__media {
+  margin: 0;
+  overflow: hidden;
+  background: #101820;
+}
+
+.split__img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+/* 메뉴의 한우영농조합 하위 페이지를 텍스트 링크 행으로 나열합니다. */
+.split__links {
+  margin: 3.6rem 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--color-line);
+}
+
+.split__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.6rem;
+  padding: 2.2rem 0;
+  border-bottom: 1px solid var(--color-line);
+  font-size: 1.6rem;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.split__link:hover {
+  color: var(--color-brand);
+}
+
+/* 홍보자료 미리보기(메인 마지막 섹션) — 좌: 공지사항 목록 / 우: 자료실 갤러리 2단.
+   목록·갤러리 서식은 서브페이지와 같은 .board / .gallery 를 그대로 씁니다. */
+.promo-preview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: start;
+  gap: 6rem;
+}
+
+.promo-preview__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.promo-preview__title {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* '더보기 ›' — 한우영농조합 링크와 같은 화살표(.link-arrow)를 씁니다. */
+.promo-preview__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: var(--color-ink-2);
+  font-size: 1.4rem;
+  transition: color 0.3s ease;
+}
+
+.promo-preview__more:hover {
+  color: var(--color-brand);
+}
+
+/* 2단 안에서는 목록·갤러리 위 여백을 줄여 한 화면에 들어오게 합니다(기본 3.6rem). */
+.promo-preview .board,
+.promo-preview .gallery {
+  margin-top: 2rem;
+}
+
 /* 위 섹션을 감싼 풀페이지 섹션도 한 화면이 아니라 내용 높이만 차지하게 합니다. */
-.fp__section:has(> .fp__inner > .home-sec--last) {
+.fp__section:has(> .fp__inner > .home-sec--content) {
   min-height: auto;
 }
 
@@ -874,13 +1152,58 @@ h4 {
   min-height: auto;
 }
 
-@media (max-width: 900px) {
-  .card-list {
-    grid-template-columns: 1fr;
+@media (max-width: 1100px) {
+  .biz-cards {
+    gap: 1.4rem;
   }
 
-  .link-list {
+  .biz-card__body {
+    top: 3.2rem;
+    right: 2.4rem;
+    left: 2.4rem;
+  }
+
+  .biz-card__more {
+    bottom: 3rem;
+    left: 2.4rem;
+  }
+
+  .split {
+    gap: 4.4rem;
+  }
+
+  .promo-preview {
+    gap: 4rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .biz-cards {
     grid-template-columns: 1fr;
+    gap: 1.6rem;
+    height: auto;
+  }
+
+  /* 한 열로 내려가면 한 장이 화면을 다 차지하지 않도록 가로 비율을 씁니다. */
+  .biz-card__link {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  /* 사진 + 텍스트는 한 열로 내려가고, 사진은 가로 비율을 씁니다. */
+  .split {
+    grid-template-columns: 1fr;
+    gap: 3.2rem;
+  }
+
+  .split__img {
+    aspect-ratio: 16 / 9;
+  }
+
+  /* 홍보자료 미리보기는 한 열로 내려갑니다. */
+  .promo-preview {
+    grid-template-columns: 1fr;
+    gap: 4.8rem;
   }
 
   .home-sec {
@@ -904,12 +1227,30 @@ h4 {
 /* 서브비주얼 — 이미지 배경(cover) 위에 그룹명을 올리는 배너입니다.
    (winteckorea.kr 의 .sub-visual / .sub-visual h2 구성 참고) */
 .sub-visual {
+  /* 배너 + LNB 를 한 덩어리로 화면 상단에 붙박입니다(sticky).
+     위에 얹히는 본문(.sub__content)이 이 고정 영역을 덮으며 올라옵니다.
+     → 스크롤하는 동안 배너·타이틀·LNB 가 제자리에 머무르고 내용은 가려지지 않습니다. */
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  /* 이미지 로드 전·실패 시 배경 */
+  background: #101820;
+}
+
+/* 배너 사진 + 그룹명 — 고정 영역의 위쪽 부분 */
+.sub-visual__hero {
   display: flex;
   align-items: center;
-  height: 35rem;
+  height: 63rem;
+  /* 배너가 화면 맨 위까지 올라오고 그 위에 헤더가 겹치므로,
+     타이틀을 헤더 높이만큼 내려 실제로 보이는 영역(헤더 아래~배너 끝)의 세로 중앙에 놓습니다.
+     box-sizing: border-box 라서 배너 전체 높이(55rem)는 그대로입니다. */
+  padding-top: var(--header-h);
   color: #fff;
   background-color: #101820;
   background-image:
+    /* 상단에 겹치는 헤더(로고·GNB 흰 글자)가 읽히도록 위쪽을 살짝 어둡게 (메인 히어로의 딤과 동일한 역할) */
+    linear-gradient(180deg, rgba(8, 11, 15, 0.5) 0%, rgba(8, 11, 15, 0) 26%),
     /* 왼쪽(제목 위치)이 어둡도록 가독성 확보용 스크림을 올립니다. */
     linear-gradient(100deg, rgba(8, 11, 15, 0.78) 0%, rgba(8, 11, 15, 0.5) 42%, rgba(8, 11, 15, 0.08) 100%),
     radial-gradient(110% 120% at 82% 0%, rgba(158, 8, 16, 0.45), transparent 60%),
@@ -920,26 +1261,32 @@ h4 {
 }
 
 /* 그룹별 서브비주얼 배경 이미지.
-   모두 CC0 또는 퍼블릭도메인(Wikimedia Commons)이라 출처 표기가 필요 없습니다.
-   실제 촬영 사진으로 교체할 때는 같은 경로의 파일만 바꾸면 됩니다. */
+   business/farm/union/location/promo 는 **KGBC 실제 촬영 사진**을 배너 비율(2589×900)로 잘라 넣었습니다.
+   (종모우 0001 · 설국한우 JYG · 설국흑우 · 착공식 현장 / 원본: D:\카톡다운로드\KGBC사진\KGBC사진)
+   about 만 CC0(Wikimedia Commons — 한옥 담장 앞 한우) 사진이고, 교체할 때는 같은 경로의 파일만 바꾸면 됩니다. */
 .sub-visual--about {
-  --sub-visual-img: url('../images/sub/about.jpg');
+  --sub-visual-img: url('../images/about.png');
 }
 
 .sub-visual--business {
-  --sub-visual-img: url('../images/sub/business.jpg');
+  --sub-visual-img: url('../images/business.png');
 }
 
 .sub-visual--farm {
-  --sub-visual-img: url('../images/sub/farm.jpg');
+  --sub-visual-img: url('../images/farm.png');
 }
 
 .sub-visual--union {
-  --sub-visual-img: url('../images/sub/union.jpg');
+  --sub-visual-img: url('../images/union.png');
 }
 
 .sub-visual--location {
-  --sub-visual-img: url('../images/sub/location.jpg');
+  --sub-visual-img: url('../images/location.png');
+}
+
+/* 홍보자료 — KGBC 착공식 현장 사진(다른 배너와 같은 2589×900 규격). */
+.sub-visual--promo {
+  --sub-visual-img: url('../images/promo.png');
 }
 
 .sub-visual__title {
@@ -950,7 +1297,11 @@ h4 {
   letter-spacing: -0.02em;
 }
 
-/* LNB — 서브페이지 상단 가로 메뉴 + 우측 현재 위치(브래드크럼) */
+/* 배너 자체가 sticky 라서 사진과 타이틀이 함께 고정됩니다.
+   (background-attachment: fixed 방식은 배경만 고정되고 타이틀은 스크롤되어 이 요구와 맞지 않습니다.) */
+
+/* LNB — 서브비주얼 하단에 붙는 가로 메뉴.
+   .sub-visual 안에 있어 배너와 함께 화면에 고정됩니다. */
 .lnb-wrap {
   height: 8rem;
   border-bottom: 1px solid var(--color-line);
@@ -960,8 +1311,6 @@ h4 {
 .lnb-wrap .container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 2.4rem;
 }
 
 .lnb {
@@ -1022,50 +1371,13 @@ h4 {
   width: 100%;
 }
 
-.path {
-  flex: none;
-}
-
-.path ul {
-  display: flex;
-  align-items: center;
-  margin: 0 -1.4rem;
-  padding: 0;
-  list-style: none;
-}
-
-.path li {
+/* 본문 래퍼 — 고정된 서브비주얼(z-index 1)보다 위에 쌓여,
+   스크롤할 때 배너·LNB 를 덮으며 올라옵니다(본문이 가려지지 않게).
+   배경색은 서브페이지 배경과 같은 값이라 화면 인상은 그대로입니다. */
+.sub__content {
   position: relative;
-  padding: 0 1.4rem;
-  color: var(--color-muted);
-  font-size: 1.6rem;
-  font-weight: 500;
-  line-height: 1.2;
-  white-space: nowrap;
-}
-
-.path li::after {
-  position: absolute;
-  top: 50%;
-  right: -0.2rem;
-  content: '';
-  width: 0.6rem;
-  height: 0.6rem;
-  border-top: 1px solid var(--color-muted);
-  border-right: 1px solid var(--color-muted);
-  transform: translateY(-50%) rotate(45deg);
-}
-
-.path li:last-child::after {
-  display: none;
-}
-
-.path a:hover {
-  color: var(--color-brand);
-}
-
-.path__home a {
-  font-weight: 600;
+  z-index: 2;
+  background: var(--color-bg-soft);
 }
 
 .sub__body {
@@ -1079,9 +1391,9 @@ h4 {
 .sub__empty {
   padding: 6rem 4.8rem;
   color: var(--color-muted);
-  font-size: 1.6rem;
+  font-size: var(--fs-body);
   text-align: center;
-  background: var(--color-bg);
+  /*background: var(--color-bg);*/
   border: 1px dashed var(--color-line);
 }
 
@@ -1097,7 +1409,7 @@ h4 {
 }
 
 @media (max-width: 1100px) {
-  .sub-visual {
+  .sub-visual__hero {
     height: 28rem;
   }
 
@@ -1128,23 +1440,10 @@ h4 {
     height: 6rem;
     font-size: 1.6rem;
   }
-
-  .path {
-    padding: 0.8rem 0 1.6rem;
-  }
-
-  .path ul {
-    justify-content: flex-end;
-    flex-wrap: wrap;
-  }
-
-  .path li {
-    font-size: 1.4rem;
-  }
 }
 
 @media (max-width: 600px) {
-  .sub-visual {
+  .sub-visual__hero {
     height: 22rem;
   }
 
@@ -1163,6 +1462,1399 @@ h4 {
 
   .sub__empty {
     padding: 4.4rem 2.4rem;
+  }
+}
+
+/* --- 서브페이지 공통 콘텐츠 -------------------------------------------------
+   페이지별 본문은 이 블록들을 조합해 만듭니다(참고: winteckorea.kr 서브페이지 =
+   섹션 라벨 → 큰 제목 → 레드 강조 문단 → 본문). 예시 페이지: 소개·브랜딩. */
+.sub-content {
+  padding: 9rem 0 13rem;
+}
+
+/* 섹션 라벨(OUR VISION 같은 영문 라벨) */
+.sub-content__eyebrow {
+  margin: 0 0 1.4rem;
+  color: var(--color-brand);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+}
+
+/* 페이지 제목 — 아래 요소와의 간격은 이 한 곳에서만 정합니다(서브페이지 공통).
+   제목 뒤에 오는 블록은 각자 위 여백을 갖지 않도록 아래에서 0으로 맞춥니다. */
+.sub-content__title {
+  margin: 0 0 5.2rem;
+  font-size: clamp(2.8rem, 3.2vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* 핵심 메시지 — 시그니처 레드 강조 문단
+   (위 여백은 제목의 margin-bottom 과 .sub-content__title + * 가 담당하므로 두지 않습니다.) */
+.sub-content__lead {
+  color: var(--color-brand);
+  font-size: clamp(1.8rem, 1.6vw, 2.3rem);
+  font-weight: 700;
+  line-height: 1.8;
+}
+
+/* 본문 문단 — 서브페이지 공통 */
+.sub-content__text {
+  margin: 0;
+  max-width: 96rem;
+  color: var(--color-ink-2);
+  font-size: var(--fs-body);
+  line-height: 1.95;
+}
+
+.sub-content__text p {
+  margin: 0;
+}
+
+.sub-content__text p + p {
+  margin-top: 2rem;
+}
+
+/* 한글 줄바꿈 — common.css 의 `p { word-break: break-all }` 은 어절(단어) 중간에서도
+   줄을 바꿔(예: "바탕으로" → "바 / 탕으로") 좁은 화면에서 문장이 끊겨 보입니다.
+   서브페이지 문단은 **어절 경계에서만** 줄바꿈하도록 되돌립니다.
+   ⚠️ word-break 은 상속값보다 요소에 직접 지정한 `p` 규칙이 우선하므로,
+   본문은 컨테이너(.sub-content__text)뿐 아니라 그 안의 `p` 에도 함께 지정합니다.
+   (긴 영문·숫자 토큰이 넘치지 않도록 overflow-wrap 으로 넘침만 허용합니다.) */
+.sub-content__lead,
+.sub-content__text,
+.sub-content__text p {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* PC 전용 줄바꿈 — <br /> 대신 쓰는 빈 span 입니다. (마크업: <span className="pc-br" />)
+   <br /> 는 화면 폭에 따라 끌 수 없어, 좁은 화면에서 문장이 어절 중간에서 잘렸습니다.
+     · PC(>900px)  : 블록이 되어 그 자리에서 줄을 바꿉니다.
+     · 모바일(≤900px): display:none 이 아니라 inline 으로 두고 공백만 넣어,
+                      앞뒤 문장이 붙지 않으면서 한 문단으로 이어집니다. */
+.pc-br {
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .pc-br {
+    display: inline;
+  }
+
+  /* 줄바꿈이 사라진 자리에 공백을 넣어 두 문장이 붙지 않게 합니다. */
+  .pc-br::before {
+    content: ' ';
+  }
+}
+
+/* 리드문 뒤에 따라오는 본문은 조금 더 띄어 문단 묶음을 구분합니다(서브페이지 공통). */
+.sub-content__lead + .sub-content__text {
+  margin-top: 3.2rem;
+}
+
+/* --- 서브페이지 공통 콘텐츠 블록 ---------------------------------------------
+   페이지가 달라도 같은 종류의 내용은 아래 같은 클래스를 씁니다.
+   (중타이틀 · 부제 · 표 · 목록 · 섹션 간격)
+   페이지 전용 그래픽(연대표·플로차트 등)만 각 페이지 클래스를 그대로 씁니다. */
+
+/* 중타이틀 */
+.sub-heading {
+  margin: 0;
+  color: var(--color-brand);
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* 중타이틀 아래 부제(한 줄 설명) */
+.sub-heading__sub {
+  margin: 1.2rem 0 0;
+  color: var(--color-ink);
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+/* 시그니처 레드 배너 라벨 — 블록 제목이나 지점 이름을 알약(오른쪽만 둥근) 형태로 표시합니다.
+   `한우영농조합` 소개와 `찾아오시는 길` 지점 버튼이 함께 씁니다. */
+.sub-label {
+  display: inline-block;
+  max-width: 100%;
+  padding: 1rem 2.2rem 1rem 1.6rem;
+  border-radius: 0 0.9rem 0.9rem 0;
+  background: var(--color-brand);
+  color: #fff;
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-align: left;
+}
+
+/* 중타이틀 블록 사이 여백 */
+.sub-section {
+  margin-top: 9rem;
+}
+
+/* 부제 뒤 본문 문단은 간격을 좁게 (그 외에는 .sub-content__text 기본값) */
+.sub-heading__sub + .sub-content__text {
+  margin-top: 1.4rem;
+}
+
+/* 2열 정보 표 — 왼쪽 항목 / 오른쪽 설명 */
+.sub-table {
+  width: 100%;
+  margin-top: 3.6rem;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.sub-table th,
+.sub-table td {
+  padding: 1.9rem 2.4rem;
+  /* --color-line 은 소프트 배경과 대비가 거의 없어 살짝 진한 회색을 씁니다. */
+  border-bottom: 1px solid rgba(20, 24, 31, 0.16);
+  vertical-align: top;
+  text-align: left;
+}
+
+/* 표 상단은 조금 굵게 그어 표의 시작을 표시합니다. */
+.sub-table tr:first-child th,
+.sub-table tr:first-child td {
+  border-top: 0.2rem solid var(--color-ink);
+}
+
+.sub-table__term {
+  width: 34%;
+  color: var(--color-ink);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  line-height: 1.7;
+}
+
+.sub-table__desc {
+  color: var(--color-ink-2);
+  font-size: var(--fs-body);
+  line-height: 1.75;
+}
+
+/* 점 목록 */
+.sub-list {
+  margin: 2.4rem 0 0;
+  padding: 0;
+  max-width: 96rem;
+  color: var(--color-ink-2);
+  font-size: var(--fs-body);
+  line-height: 1.75;
+  list-style: none;
+}
+
+.sub-list li {
+  position: relative;
+  padding-left: 1.4rem;
+}
+
+.sub-list li + li {
+  margin-top: 0.6rem;
+}
+
+.sub-list li::before {
+  position: absolute;
+  left: 0;
+  content: '·';
+  color: var(--color-brand);
+  font-weight: 700;
+}
+
+/* 소개·브랜딩 — 1행: 본문 | 연필화 좌우 2단, 2행: 도식(가운데) */
+.brand {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.72fr);
+  grid-template-areas:
+    'text figure'
+    'diagram diagram';
+  align-items: center;
+  column-gap: 6rem;
+  row-gap: 6rem;
+}
+
+.brand__text {
+  grid-area: text;
+  /* 1행의 높이는 일러스트가 좌우하므로, 가운데 정렬을 그대로 두면
+     화면이 넓어질수록 본문이 아래로 밀려 제목과의 간격이 페이지마다 달라집니다.
+     → 본문만 행 위쪽에 붙여 제목 아래 간격을 종모우 페이지와 똑같이 유지합니다. */
+  align-self: start;
+}
+
+/* 2단 좌측 열 안에서는 위 여백을 그리드(.brand)가 담당하므로 첫 블록의 위 여백을 없앱니다. */
+.brand__text > :first-child {
+  margin-top: 0;
+}
+
+/* 1행 우측 — 종모우 연필화. 본문과 좌우 2단으로 놓고 세로 가운데를 맞춥니다. */
+.brand__figure {
+  grid-area: figure;
+  justify-self: end;
+  width: 100%;
+  /* 원본(1536×1024)을 그대로 쓰면 과대해지므로 표시 폭만 제한합니다. */
+  max-width: 70rem;
+  margin: 0;
+}
+
+.brand__figure img {
+  width: 100%;
+  height: auto;
+}
+
+/* 2행 — 한국형 개량의 스펙트럼 확장 도식(branding-bull.svg).
+   두 열 아래 전체 폭에 걸쳐 놓고 가운데로 모읍니다(벡터라 확대해도 깨지지 않음). */
+.brand-diagram {
+  grid-area: diagram;
+  justify-self: center;
+  width: 100%;
+  max-width: 80rem;
+  margin: 0;
+}
+
+.brand-diagram img {
+  width: 100%;
+  height: auto;
+}
+
+/* 제목 바로 다음에 오는 블록은 위 여백을 갖지 않습니다.
+   (예: 소개·브랜딩의 .brand, 종모우의 .sub-content__lead)
+   → 서브페이지가 늘어나도 제목 아래 간격은 .sub-content__title 의
+   margin-bottom 하나로 통일됩니다. 명시도가 같은 규칙보다 뒤에 있어야 하므로
+   이 위치에 둡니다. */
+.sub-content__title + * {
+  margin-top: 0;
+}
+
+@media (max-width: 1100px) {
+  /* 표 칸 여백을 줄여 가로로 눌리지 않게 합니다. */
+  .sub-table th,
+  .sub-table td {
+    padding: 1.5rem 1.6rem;
+  }
+
+  .sub-table__term {
+    width: 38%;
+  }
+
+  /* 좁은 화면에서는 본문 → 일러스트 → 도식 순으로 위에서 아래로 쌓습니다. */
+  .brand {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'text'
+      'figure'
+      'diagram';
+    row-gap: 4.8rem;
+  }
+
+  /* 세로 배치에서는 일러스트를 가운데로 모아 도식과 축을 맞춥니다. */
+  .brand__figure {
+    justify-self: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .sub-content {
+    padding: 6.4rem 0 9rem;
+  }
+
+  .sub-content__title {
+    margin-bottom: 3.6rem;
+  }
+
+  .sub-section {
+    margin-top: 6.4rem;
+  }
+
+  .sub-heading {
+    font-size: 1.9rem;
+  }
+
+  .sub-heading__sub {
+    font-size: 1.7rem;
+  }
+
+  /* 세로로 좁아지면 표를 항목 / 설명 위아래 한 칸씩으로 쌓습니다. */
+  .sub-table,
+  .sub-table tbody,
+  .sub-table tr,
+  .sub-table th,
+  .sub-table td {
+    display: block;
+    width: auto;
+  }
+
+  .sub-table tr {
+    border-bottom: 1px solid rgba(20, 24, 31, 0.16);
+  }
+
+  .sub-table th,
+  .sub-table td {
+    padding: 0;
+    border-bottom: 0;
+  }
+
+  .sub-table th {
+    padding: 1.6rem 0;
+  }
+
+  .sub-table td {
+    padding: 1.6rem 0;
+  }
+}
+
+/* --- 그래픽 요소 (src/pages/business/Sire.tsx) -------------------------------
+   중타이틀·부제·표·목록 등 공통 콘텐츠는 위의 .sub-* 공통 클래스를 그대로 씁니다.
+   이 페이지에서만 필요한 그래픽 요소만 아래에 추가합니다. */
+
+/* 개발 연대표 — 세로 1단 : 3~7계대 카드 → 종모우 선발 → 선발된 종모우 */
+.sire-lineage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.8rem;
+  margin-top: 3.4rem;
+}
+
+.sire-lineage figure {
+  margin: 0;
+}
+
+.sire-lineage figure img {
+  width: 100%;
+  height: auto;
+}
+
+/* 개발 연대표 — 3~7계대 카드를 화살표로 이어 붙인 한 줄
+   (카드 : 화살표 : 간격 비율은 원본 스트립 329.14 × 87.34 의 값을 그대로 따릅니다.)
+   좁은 화면 대응은 아래 미디어쿼리 참고:
+   900px 이하 → 화살표·간격 축소 / 600px 이하 → 2열 그리드 + 화살표 숨김 */
+.sire-lineage__cards {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  width: 100%;
+}
+
+.sire-lineage__card {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* 카드 사이 화살표 (장식) */
+.sire-lineage__arrow {
+  flex: none;
+  width: 5.4rem;
+  height: auto;
+}
+
+/* 종모우 선발 화살표 — SVG 자체가 세로형(글씨는 가로)이라 회전이 필요 없습니다.
+   (안쪽 img 는 위의 `.sire-lineage figure img { width: 100% }` 를 그대로 씁니다.) */
+.sire-lineage__pick {
+  width: 12rem;
+}
+
+/* 선발된 종모우 라인 드로잉 */
+.sire-lineage__bull {
+  width: 100%;
+  max-width: 76rem;
+}
+
+/* 후보종모우 생산 — 플로차트 */
+.sire-produce__figure {
+  margin: 3.6rem auto 0;
+}
+
+.sire-produce__figure img {
+  width: 100%;
+  height: auto;
+}
+
+/* 한우농가 — 일러스트 */
+.sire-farm__figure {
+  margin: 3.6rem auto 0;
+  max-width: 40rem;
+}
+
+.sire-farm__figure img {
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 1100px) {
+  .sire-lineage {
+    gap: 2.4rem;
+  }
+
+  .sire-lineage__cards {
+    gap: 1rem;
+  }
+
+  .sire-lineage__arrow {
+    width: 4.2rem;
+  }
+
+  .sire-lineage__bull {
+    max-width: 100%;
+  }
+
+  .sire-produce__figure {
+    max-width: 100%;
+  }
+
+  .sire-farm__figure {
+    max-width: 32rem;
+  }
+}
+
+@media (max-width: 900px) {
+  /* 카드가 5장이라 좁아질수록 카드 안 글자가 작아집니다
+     → 화살표·간격을 줄여 카드 폭을 최대한 확보합니다. */
+  .sire-lineage__cards {
+    gap: 0.7rem;
+  }
+
+  .sire-lineage__arrow {
+    width: 3.4rem;
+  }
+}
+
+@media (max-width: 600px) {
+  /* 한 줄에 5장을 넣으면 카드 폭이 50px 안팎까지 줄어 카드 안 계대·날짜 글자를 읽을 수 없습니다
+     → 2열 그리드로 접습니다. 카드 사이 진행 화살표는 방향 표시가 어긋나므로 숨깁니다. */
+  .sire-lineage__cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.2rem 1rem;
+    max-width: 46rem;
+  }
+
+  /* 5장이라 마지막(7계대) 카드는 홀로 남습니다 → 두 칸을 차지하게 두고 가운데 정렬해
+     한 칸 폭을 유지합니다. */
+  .sire-lineage__card:last-child {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc(50% - 0.5rem);
+  }
+
+  .sire-lineage__arrow {
+    display: none;
+  }
+
+  .sire-lineage__pick {
+    width: 10rem;
+  }
+}
+
+/* --- 그래픽 요소 (src/pages/farm/Branding.tsx) -------------------------------
+   중타이틀·리드문·본문은 위의 .sub-* 공통 클래스를 그대로 씁니다.
+   이 페이지에서만 필요한 블록만 아래에 추가합니다. */
+
+/* 01. 설국농장 소개 — 좌 본문 | 우 농장 전경 사진.
+   두 열의 윗선을 제목 아래에 나란히 맞춥니다(align-items: start). */
+.farm-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 6rem;
+}
+
+/* 본문 블록이 지나치게 넓어지지 않도록 읽기 좋은 폭으로 제한합니다. */
+.farm-intro__text {
+  max-width: min(100%, 96rem);
+}
+
+.farm-intro__figure {
+  margin: 0;
+}
+
+.farm-intro__figure img {
+  width: 100%;
+  height: auto;
+}
+
+/* 02. 설국(初國) — '설' · '국' 두 행 (큰 글자 | 설명 | 영문 대응어) */
+.farm-brand__list {
+  margin: 4.4rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.farm-brand__item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2.4rem 4.8rem;
+}
+
+.farm-brand__item + .farm-brand__item {
+  margin-top: 5.2rem;
+}
+
+/* 큰 글자 — 붓글씨 느낌을 살려 명조 계열로 씁니다. */
+.farm-brand__char {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: 'Nanum Myeongjo', 'Noto Serif KR', Batang, 바탕, serif;
+  font-size: 7.6rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* 라벨 행 — 아래 실선이 이미지의 구분선 역할을 합니다. */
+.farm-brand__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem 2.4rem;
+  padding-bottom: 1.4rem;
+  border-bottom: 1px solid rgba(20, 24, 31, 0.32);
+}
+
+.farm-brand__label {
+  color: var(--color-ink);
+  font-size: 1.9rem;
+  font-weight: 700;
+}
+
+.farm-brand__tag {
+  color: var(--color-ink-2);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.farm-brand__desc {
+  margin: 1.6rem 0 0;
+  color: var(--color-ink-2);
+  font-size: var(--fs-body);
+  line-height: 1.8;
+}
+
+/* 영문 대응어 — 데이터의 줄바꿈(\n)을 그대로 살립니다. */
+.farm-brand__en {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: 3.4rem;
+  font-weight: 700;
+  line-height: 1.14;
+  letter-spacing: -0.01em;
+  text-align: right;
+  white-space: pre-line;
+}
+
+/* 하단 요약 — '설'은 초록, '국'은 파랑으로 강조 */
+.farm-brand__summary {
+  margin: 6.4rem 0 0;
+  color: var(--color-ink);
+  font-size: clamp(2rem, 1.9vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.farm-brand__key {
+  font-weight: 700;
+}
+
+.farm-brand__key--seol {
+  color: #2f8a3c;
+}
+
+.farm-brand__key--guk {
+  color: #1f6bb5;
+}
+
+.farm-brand__note {
+  margin: 2.2rem 0 0;
+  color: var(--color-ink-2);
+  font-size: 1.6rem;
+  line-height: 1.8;
+  text-align: center;
+}
+
+/* 03. 로고 타입 — 원본 도식 이미지(seolguk-mark.svg) 한 장으로 구성합니다. */
+.farm-logo__figure {
+  margin: 4.4rem auto 0;
+  max-width:96rem;
+}
+
+.farm-logo__figure img {
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 1100px) {
+  /* 좁은 화면에서는 본문 → 사진 순으로 한 단이 됩니다. */
+  .farm-intro {
+    grid-template-columns: 1fr;
+    gap: 4.8rem;
+  }
+}
+
+@media (max-width: 900px) {
+  /* 강제 줄바꿈을 풀어 자연스럽게 흐르게 합니다. */
+  .farm-intro__text br {
+    display: none;
+  }
+
+  /* 영문 대응어를 설명 아래로 내립니다. */
+  .farm-brand__item {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 1.2rem 2.4rem;
+  }
+
+  .farm-brand__en {
+    grid-column: 2;
+    font-size: 2.4rem;
+    text-align: left;
+    white-space: normal;
+  }
+
+  .farm-brand__summary {
+    margin-top: 4.8rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .farm-brand__item {
+    grid-template-columns: 1fr;
+    gap: 1.6rem;
+  }
+
+  .farm-brand__char {
+    font-size: 5.6rem;
+  }
+
+  .farm-brand__en {
+    grid-column: 1;
+  }
+}
+
+/* --- 주소·연락처 (src/pages/location/Contact.tsx) -----------------------------
+   좌: Google 지도 | 우: 지점 목록 + 주문 연락처.
+   왼쪽 라벨을 누르면 지도가 그 위치로 바뀝니다. */
+
+.loc {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 6rem;
+}
+
+/* 지도 — iframe 이 자리를 차지하도록 4:3 비율 박스를 잡아 둡니다(로딩 중 레이아웃 흔들림 방지). */
+.loc__map {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--color-bg-gray);
+  border: 1px solid rgba(20, 24, 31, 0.14);
+}
+
+.loc__map-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.loc__map-note {
+  margin: 1.2rem 0 0;
+  color: var(--color-muted);
+  font-size: 1.4rem;
+}
+
+.loc__map-note a {
+  color: var(--color-brand);
+  font-weight: 600;
+}
+
+/* 지점 목록 — 라벨은 오른쪽만 둥근 배너 형태(원본 디자인 그대로) */
+.loc__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.loc__item + .loc__item {
+  margin-top: 3.2rem;
+}
+
+/* 지도에 표시할 지점 버튼 — 시각 스타일은 공통 .sub-label 을 그대로 씁니다. */
+.loc__label {
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.loc__label:hover {
+  background: var(--color-brand-dark);
+}
+
+/* 지도에 표시 중인 지점 — 라벨 바깥으로 옅은 링을 둘러 구분합니다. */
+.loc__label.is-active {
+  box-shadow: 0 0 0 0.3rem rgba(158, 8, 16, 0.18);
+}
+
+.loc__address {
+  margin: 1.4rem 0 0;
+  color: var(--color-ink-2);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+}
+
+/* 주문 연락처 — 위 목록과 구분선으로 나눕니다. */
+.loc__contact {
+  margin-top: 4.8rem;
+  padding-top: 3.6rem;
+  border-top: 1px solid rgba(20, 24, 31, 0.16);
+}
+
+.loc__contact-title {
+  display: inline-block;
+  margin: 0;
+  padding: 0.9rem 2rem;
+  border: 0.2rem solid var(--color-brand);
+  border-radius: 0.9rem;
+  color: var(--color-brand);
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+
+.loc__contact-list {
+  margin: 2rem 0 0;
+  padding: 0;
+  color: var(--color-ink-2);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  list-style: none;
+}
+
+.loc__contact-list li + li {
+  margin-top: 0.8rem;
+}
+
+.loc__contact-key {
+  display: inline-block;
+  min-width: 3.2rem;
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.loc__contact-list a {
+  transition: color 0.2s ease;
+}
+
+.loc__contact-list a:hover {
+  color: var(--color-brand);
+}
+
+@media (max-width: 1100px) {
+  /* 한 단으로 내려가면 지도 → 지점 목록 → 연락처 순으로 쌓입니다. */
+  .loc {
+    grid-template-columns: 1fr;
+    gap: 4.4rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .loc__map {
+    aspect-ratio: 3 / 2;
+  }
+
+  .loc__item + .loc__item {
+    margin-top: 2.4rem;
+  }
+
+  .sub-label {
+    padding: 0.9rem 1.8rem 0.9rem 1.4rem;
+    font-size: 1.5rem;
+  }
+
+  .loc__contact {
+    margin-top: 3.6rem;
+    padding-top: 2.8rem;
+  }
+
+  .loc__contact-title {
+    padding: 0.8rem 1.6rem;
+    font-size: 1.5rem;
+  }
+}
+
+/* --- 게시판 (src/pages/promo/Notice.tsx · Archive.tsx) -----------------------
+   공지사항·자료실이 함께 쓰는 목록 스타일. 행은 [번호 | 제목 | 등록일] 3열입니다. */
+.board {
+  margin: 3.6rem 0 0;
+  padding: 0;
+  list-style: none;
+  /* 표 상단 실선으로 목록의 시작을 표시합니다(공통 표와 같은 결). */
+  border-top: 0.2rem solid var(--color-ink);
+}
+
+.board__item {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr) 12rem;
+  align-items: start;
+  gap: 2.4rem;
+  padding: 2.2rem 0;
+  border-bottom: 1px solid rgba(20, 24, 31, 0.16);
+}
+
+.board__num {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.board__title {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  line-height: 1.6;
+  /* 한글은 어절 단위로만 줄바꿈합니다(공통 `p { word-break: break-all }` 덮기). */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* 메인 미리보기에서는 제목이 링크입니다 — 호버 시 브랜드 컴러 */
+.board__title a {
+  transition: color 0.3s ease;
+}
+
+.board__title a:hover {
+  color: var(--color-brand);
+}
+
+.board__date {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+/* --- 게시판 상세 (src/pages/promo/NoticeDetail.tsx · ArchiveDetail.tsx) -------
+   목록에서 제목/카드를 누르면 들어오는 상세 화면입니다. [제목 · 등록일] → 본문 → 목록으로. */
+.post {
+  margin-top: 3.6rem;
+}
+
+.post__head {
+  padding-bottom: 2.4rem;
+  border-bottom: 1px solid rgba(20, 24, 31, 0.16);
+}
+
+.post__title {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: clamp(2rem, 1.8vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.45;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.post__date {
+  margin: 1.2rem 0 0;
+  color: var(--color-muted);
+  font-size: 1.5rem;
+}
+
+/* 본문 — 원고의 줄바꿈(빈 줄 포함)을 그대로 살립니다. */
+.post__body {
+  margin: 0;
+  padding: 3.2rem 0;
+  color: var(--color-ink-2);
+  font-size: var(--fs-body);
+  line-height: 1.95;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  white-space: pre-line;
+}
+
+/* '목록으로' 버튼 줄 — 버튼은 가운데 정렬합니다. */
+.post__foot {
+  margin: 0;
+  padding-top: 3.2rem;
+  text-align: center;
+}
+
+/* 자료실 상세 — 좌: 썸네일 / 우: 파일 정보 + 내려받기 */
+.post--file {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 5rem;
+}
+
+.post__thumb {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  background: #101820;
+}
+
+.post__thumb img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+/* 파일 형식 배지(PDF 등) — 갤러리 카드와 같은 서식 */
+.post__ext {
+  position: absolute;
+  right: 1.6rem;
+  bottom: 1.6rem;
+  padding: 0.5rem 1rem;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  background: rgba(16, 24, 32, 0.72);
+}
+
+/* 오른쪽 열에서는 본문 위 여백을 줄여 썸네일과 나란히 정렬합니다. */
+.post--file .post__body {
+  padding: 2.4rem 0 0;
+}
+
+/* 첨부 파일 — 보기 전체가 내려받기 링크입니다. */
+.post__file {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  margin-top: 3.2rem;
+  padding: 1.6rem 2rem;
+  background: rgba(255, 255, 255, 0.66);
+  border: 1px solid rgba(20, 24, 31, 0.16);
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+.post__file:hover,
+.post__file:focus-visible {
+  background: #fff;
+  border-color: var(--color-brand);
+}
+
+.post__file-name {
+  flex: 1 1 auto;
+  color: var(--color-ink);
+  font-size: 1.5rem;
+  font-weight: 600;
+  /* 파일명은 띄어쓰기가 없어도 접히도록 합니다. */
+  word-break: break-all;
+}
+
+.post__file-size {
+  flex: 0 0 auto;
+  color: var(--color-muted);
+  font-size: 1.4rem;
+}
+
+.post__file-btn {
+  flex: 0 0 auto;
+  padding: 0.9rem 1.8rem;
+  background: var(--color-brand);
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 600;
+  transition: background 0.25s ease;
+}
+
+.post__file:hover .post__file-btn {
+  background: var(--color-brand-dark);
+}
+
+.post--file .post__foot {
+  padding-top: 2.4rem;
+}
+
+/* 좁은 화면 — 썸네일과 정보를 위아래로 쌓고, 첨부 행은 파일명이 한 줄을 차지합니다. */
+@media (max-width: 900px) {
+  .post--file {
+    grid-template-columns: 1fr;
+    gap: 3.2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .post {
+    margin-top: 2.8rem;
+  }
+
+  .post__body {
+    padding: 2.4rem 0;
+  }
+
+  .post__file {
+    flex-wrap: wrap;
+    gap: 0.8rem 1.2rem;
+  }
+
+  .post__file-name {
+    flex: 1 1 100%;
+  }
+}
+
+/* 목록이 비었을 때 — 소프트 배경에서는 --color-line 이 안 보이므로 군청색 계열 회색을 씁니다. */
+.board__empty {
+  margin: 3.6rem 0 0;
+  padding: 6rem 2.4rem;
+  color: var(--color-muted);
+  font-size: var(--fs-body);
+  text-align: center;
+  border: 1px dashed rgba(20, 24, 31, 0.16);
+}
+
+@media (max-width: 600px) {
+  /* 번호·제목을 한 줄, 등록일을 그 아래로 내립니다. */
+  .board__item {
+    grid-template-columns: 4.4rem minmax(0, 1fr);
+    gap: 0.8rem 1.6rem;
+    padding: 1.8rem 0;
+  }
+
+  .board__date {
+    grid-column: 2;
+    text-align: left;
+  }
+
+  .board__empty {
+    padding: 4.4rem 2.4rem;
+  }
+}
+
+/* --- 자료실 갤러리 (src/pages/promo/Archive.tsx · 메인 홍보자료 섹션) ---------
+   자료실 목록은 썸네일 카드를 **4단**으로 놓고, 메인 미리보기(.gallery--preview)는 3단입니다.
+   카드 전체가 하나의 링크이고(상세 페이지로 이동) 썸네일은 4:3 비율로 고정합니다. */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2.4rem;
+  margin: 3.6rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* 메인 미리보기는 카드가 작고 3건만 보여주므로 3단 고정입니다. */
+.gallery--preview {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.gallery__link {
+  display: block;
+}
+
+.gallery__thumb {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: #101820;
+}
+
+.gallery__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.gallery__link:hover .gallery__img,
+.gallery__link:focus-visible .gallery__img {
+  transform: scale(1.06);
+}
+
+/* 파일 형식 배지(PDF 등) — 밝은 사진 위에서도 읽히도록 어두운 반투명 배경을 씁니다. */
+.gallery__ext {
+  position: absolute;
+  right: 1.2rem;
+  bottom: 1.2rem;
+  padding: 0.4rem 0.9rem;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  background: rgba(16, 24, 32, 0.72);
+}
+
+.gallery__title {
+  display: block;
+  margin-top: 1.6rem;
+  color: var(--color-ink);
+  font-size: 1.7rem;
+  font-weight: 600;
+  line-height: 1.5;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  transition: color 0.3s ease;
+}
+
+.gallery__link:hover .gallery__title {
+  color: var(--color-brand);
+}
+
+.gallery__meta {
+  display: block;
+  margin-top: 0.6rem;
+  color: var(--color-muted);
+  font-size: 1.4rem;
+  line-height: 1.5;
+}
+
+/* 메인 미리보기는 카드 한 장이 작으므로 제목을 한 단계 작게 씁니다. */
+.gallery--preview .gallery__title {
+  font-size: 1.5rem;
+}
+
+/* 좀은 화면에서는 4단 → 3단 → 2단으로 내려갑니다. */
+@media (max-width: 1100px) {
+  .gallery {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.8rem;
+  }
+
+  .gallery__title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .gallery {
+    gap: 1.4rem;
+  }
+
+  .gallery__title {
+    margin-top: 1rem;
+    font-size: 1.4rem;
+  }
+
+  .gallery--preview .gallery__title {
+    font-size: 1.4rem;
+  }
+
+  .gallery__meta {
+    font-size: 1.2rem;
+  }
+}
+
+/* --- 한우영농조합 소개 (src/pages/union/About.tsx) -------------------------- */
+
+/* 상단 — 좌: 리드문 + 본문 + 사업내용 / 우: 조합원 분포도 (가로 2단, 좌 : 우 = 6 : 4) */
+.union-top {
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 4fr);
+  align-items: start;
+  gap: 5rem;
+}
+
+/* 조합원 분포도 — 오른쪽 열 안에서 70% 크기로 놓고,
+   큰 화면에서 지도가 지나치게 커지지 않도록 max-width 상한을 둡니다. */
+.union-map {
+  margin: 3.2rem 0 0;
+}
+
+.union-map img {
+  display: block;
+  width: 70%;
+  max-width: 42rem;
+  height: auto;
+}
+
+/* 상단 왼쪽 열의 사업내용 — 본문 문단 뒤에 이어 붙입니다(.sub-section 보다 좁은 간격). */
+.union-business {
+  margin-top: 4.4rem;
+}
+
+@media (max-width: 1100px) {
+  /* 좁은 화면에서는 텍스트 → 분포도 순으로 위아래로 쌓입니다. */
+  .union-top {
+    grid-template-columns: 1fr;
+    gap: 4.8rem;
+  }
+
+  /* 한 단이 되면 분포도는 화면 폭을 채우되 상한(42rem)까지만 커집니다. */
+  .union-map img {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  /* 모바일은 상한을 풀어 지도를 100% 폭으로 꽉 채웁니다. */
+  .union-map img {
+    max-width: none;
+  }
+}
+
+/* --- 사진 스와이퍼 (src/components/PhotoSwiper.tsx) ------------------------ */
+
+/* 트랙은 **네이티브 가로 스크롤 + CSS scroll-snap** 이라 터치·트랙패드 스와이프가 그대로 동작합니다.
+   한 화면에 보이는 장수는 아래 > li 의 flex-basis 가 정합니다(기본 3장 → 2장 → 1장). */
+.photo-swiper__viewport {
+  position: relative;
+}
+
+.photo-swiper__track {
+  display: flex;
+  gap: 1.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.photo-swiper__track::-webkit-scrollbar {
+  display: none;
+}
+
+.photo-swiper__track > li {
+  flex: 0 0 calc((100% - 3.2rem) / 3);
+  scroll-snap-align: start;
+}
+
+/* 원본 비율(3:2)이 같아 잘라내지 않고 그대로 보여줍니다. */
+.photo-swiper__track img {
+  width: 100%;
+  height: auto;
+  user-select: none;
+}
+
+/* 마우스로 끌는 동안에는 스냅을 잠시 풀어 손을 따라오게 합니다. */
+.photo-swiper__track.is-dragging {
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+  cursor: grabbing;
+}
+
+/* 키보드로 트랙에 초점이 갔을 때만 테두리를 보입니다(좌우 방향키로 이동). */
+.photo-swiper__track:focus-visible {
+  outline: 0.2rem solid var(--color-brand);
+  outline-offset: 0.6rem;
+}
+
+/* 좌우 화살표 — 사진 위에 얹고, 끝에 닿으면 사라집니다. */
+.photo-swiper__nav {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 4.6rem;
+  height: 4.6rem;
+  margin-top: -2.3rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 0.4rem 1.6rem rgba(20, 24, 31, 0.18);
+  color: var(--color-ink);
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.photo-swiper__nav::before {
+  content: '';
+  width: 1rem;
+  height: 1rem;
+  border-top: 0.2rem solid currentColor;
+  border-right: 0.2rem solid currentColor;
+}
+
+.photo-swiper__nav--prev {
+  left: 1.6rem;
+}
+
+.photo-swiper__nav--prev::before {
+  margin-left: 0.3rem;
+  transform: rotate(-135deg);
+}
+
+.photo-swiper__nav--next {
+  right: 1.6rem;
+}
+
+.photo-swiper__nav--next::before {
+  margin-right: 0.3rem;
+  transform: rotate(45deg);
+}
+
+.photo-swiper__nav:hover:not(:disabled) {
+  background: var(--color-brand);
+  color: #fff;
+}
+
+.photo-swiper__nav:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 위치 점 */
+.photo-swiper__dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 2.4rem;
+}
+
+.photo-swiper__dot {
+  width: 0.9rem;
+  height: 0.9rem;
+  padding: 0;
+  border-radius: 50%;
+  background: rgba(20, 24, 31, 0.22);
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.photo-swiper__dot.is-active {
+  background: var(--color-brand);
+  transform: scale(1.25);
+}
+
+@media (max-width: 900px) {
+  .photo-swiper__track > li {
+    flex-basis: calc((100% - 1.6rem) / 2);
+  }
+}
+
+@media (max-width: 600px) {
+  .photo-swiper__track > li {
+    flex-basis: 100%;
+  }
+
+  .photo-swiper__nav {
+    width: 3.8rem;
+    height: 3.8rem;
+    margin-top: -1.9rem;
+  }
+
+  .photo-swiper__nav--prev {
+    left: 1rem;
+  }
+
+  .photo-swiper__nav--next {
+    right: 1rem;
   }
 }
 
@@ -1263,3 +2955,4 @@ h4 {
     font-size: 2.2rem;
   }
 }
+

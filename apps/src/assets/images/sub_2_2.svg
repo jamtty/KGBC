@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- '종모우 선발' 세로형 화살표. 아래를 향하고, 라벨 글씨는 가로로 읽힙니다.
+     v4(2026-10-07): 글씨가 알약에 너무 붙어 보여 알약 폭을 46 → 60 으로 넓혀
+     좌우 여백(약 7.5px)을 확보하고, 알약 높이는 16 → 14 로 줄였습니다.
+     넓어진 알약에 맞춰 화살촉도 키우고(viewBox 68×70) miter 끝이 잘리지 않게 여유를 뒀습니다. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 70">
+  <defs>
+    <style>
+      .pk-line {
+        fill: none;
+        stroke: #9f0810;
+        stroke-width: 2.2;
+      }
+
+      .pk-mark {
+        fill: #9f0810;
+      }
+
+      .pk-label {
+        fill: #fff;
+        font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+      }
+    </style>
+  </defs>
+  <!-- 세로 축 -->
+  <line class="pk-line" x1="34" y1="0" x2="34" y2="57"/>
+  <!-- 아래를 향하는 화살촉 (miter 조인트로 끝을 뾰족하게) -->
+  <polyline class="pk-line" points="26.5 57 34 67.5 41.5 57" stroke-linejoin="miter" stroke-linecap="butt"/>
+  <!-- 라벨 알약 — 좌우 여백 확보를 위해 가로로 넓게 잡습니다. -->
+  <rect class="pk-mark" x="4" y="22" width="60" height="14" rx="7" ry="7"/>
+  <text class="pk-label" x="34" y="31.8" text-anchor="middle">종모우 선발</text>
+</svg>

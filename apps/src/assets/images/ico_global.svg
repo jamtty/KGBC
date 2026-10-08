@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none" aria-hidden="true">
+  <!-- 세계(다양한 식문화) — 지구 -->
+  <g stroke="#14181f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="24" cy="24" r="15" />
+    <path d="M9 24h30" />
+    <ellipse cx="24" cy="24" rx="6.6" ry="15" stroke="#9e0810" />
+  </g>
+</svg>

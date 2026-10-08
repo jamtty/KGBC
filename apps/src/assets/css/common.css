@@ -374,6 +374,23 @@ body {
     font-size: 1.3rem;
   }
 }
+/* ==========================================
+   전역 요소 기본값
+   - 리셋 · 폰트 · 공통 요소는 이 파일(common.css)에서 관리합니다.
+   - body / a / img / 제목 / button 규칙은 style.css 에서 이관했습니다(2026-10-07).
+     `*, *::before, *::after { box-sizing: border-box }` 는 위 초기화에 이미 있습니다.
+   ========================================== */
+body {
+  /* 루트가 10px 기준이라 본문 기본 글자 크기는 16px로 따로 지정합니다. */
+  font-size: 1.6rem;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 img,
 picture,
 video,
@@ -382,18 +399,33 @@ svg {
   display: block;
   max-width: 100%;
 }
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.3;
+}
+
+/* 위 초기화의 `* { font: inherit }` 가 strong/b 의 기본 굵기까지 지우므로 되살립니다. */
+b,
+strong {
+  font-weight: 700;
+}
+
 button {
+  font: inherit;
+  color: inherit;
   background: none;
   border: 0;
   cursor: pointer;
 }
-a {
-  text-decoration: none;
-}
+
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
 ol,
 ul,
 dl,

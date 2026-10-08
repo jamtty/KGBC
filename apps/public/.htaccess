@@ -1,0 +1,46 @@
+# KGBC 홈페이지 (React SPA) — Apache 설정
+# ------------------------------------------------------------------
+# 목적: /about/branding 같은 하위 경로를 새로고침(F5)·직접 입력·공유 링크로 열어도
+#       서버 404(카페24 오류 페이지) 대신 index.html 을 응답하게 합니다.
+#       (클라이언트 라우터가 해당 경로를 이어서 렌더링합니다.)
+#
+# ※ 만약 서버가 500 오류를 내면 아래 `Options -MultiViews` 줄만 지우고 다시 시도하세요.
+#    (호스팅이 AllowOverride Options 를 막아둔 경우에만 문제가 됩니다.)
+
+Options -MultiViews
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # 1) 실제로 존재하는 파일/디렉터리는 그대로 사용 (assets, favicon, upload, backend 등)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # 2) PHP 백엔드 영역은 건드리지 않음 (backend 폴더 자체 규칙을 따름)
+  RewriteRule ^backend(/|$) - [L]
+
+  # 3) 그 외 모든 경로(SPA 라우트)는 index.html 로 전달
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# HTML 은 캐시하지 않아 배포 즉시 반영, 해시가 붙은 정적 자산은 장기 캐시
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "\.(js|css|woff2?|ttf|eot|svg|png|jpe?g|gif|webp|ico|mp4)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  # 파비콘은 파일명이 고정(해시 없음)이라 장기 캐시에서 제외합니다.
+  # (히어로 영상은 src/assets 에서 import 되어 /assets/main_movie-<해시>.mp4 로 나오므로 위 장기 캐시 대상입니다.)
+  <FilesMatch "^(favicon\.(svg|ico)|apple-touch-icon\.png)$">
+    Header set Cache-Control "public, max-age=86400"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css application/javascript application/json image/svg+xml
+</IfModule>

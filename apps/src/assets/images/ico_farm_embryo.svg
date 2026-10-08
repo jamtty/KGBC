@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none" aria-hidden="true">
+  <!-- 설국농장 · 수정란 — 난자(바깥 원)와 분열 중인 할구 -->
+  <g stroke="#14181f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="24" cy="24" r="15" />
+    <circle cx="20.5" cy="21" r="3.8" stroke="#9e0810" />
+    <circle cx="28.2" cy="23.2" r="3.2" stroke="#9e0810" />
+    <circle cx="22.8" cy="28.6" r="3.4" stroke="#9e0810" />
+  </g>
+</svg>

@@ -156,6 +156,9 @@ export default function FullPage({ children }: FullPageProps) {
 
     const ctx = gsap.context(() => {
       for (const section of gsap.utils.toArray<HTMLElement>('.fp__section', root)) {
+        // data-no-reveal 이 있는 섹션(예: 배경 동영상 히어로)은 리빌·드리프트 없이 즉시 보여줍니다.
+        if (section.querySelector('[data-no-reveal]')) continue
+
         const marked = gsap.utils.toArray<HTMLElement>('[data-reveal]', section)
         const targets = marked.length ? marked : gsap.utils.toArray<HTMLElement>('.fp__inner > *', section)
         const inner = section.querySelector<HTMLElement>('.fp__inner')

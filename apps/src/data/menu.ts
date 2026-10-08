@@ -41,7 +41,7 @@ export const MENU: MenuGroup[] = [
       { label: '소개·브랜딩', path: '/farm/branding' },
       { label: '설국한우 JYG', path: '/farm/jyg' },
       { label: '설국농장 수정란', path: '/farm/embryo' },
-      { label: '설국후우', path: '/farm/huwoo' },
+      { label: '설국흑우', path: '/farm/huwoo' },
     ],
   },
   {
@@ -49,6 +49,15 @@ export const MENU: MenuGroup[] = [
     label: '한우영농조합',
     path: '/union',
     children: [{ label: '소개', path: '/union/about' }],
+  },
+  {
+    id: 'promo',
+    label: '홍보자료',
+    path: '/promo',
+    children: [
+      { label: '공지사항', path: '/promo/notice' },
+      { label: '자료실', path: '/promo/archive' },
+    ],
   },
   {
     id: 'location',

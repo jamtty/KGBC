@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none" aria-hidden="true">
+  <!-- 설국농장 · 설국흑우 — 새 품종(새싹) -->
+  <g stroke="#14181f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M24 41V22" />
+    <path d="M17 41h14" />
+    <path d="M24 31c-8.5 0-13-4.6-13-11.5 8.3 0 13 4.6 13 11.5Z" />
+    <path d="M24 25.5c8.5 0 13-4.6 13-11.5-8.3 0-13 4.6-13 11.5Z" stroke="#9e0810" />
+  </g>
+</svg>
